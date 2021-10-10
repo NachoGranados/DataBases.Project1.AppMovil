@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="400px"
+    android:layout_marginLeft="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="8dp"
+    android:background="#2d2d2d">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="144dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/movie_theater_image"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <TextView
+        android:id="@+id/movie_teather_title"
+        android:layout_width="196dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="16dp"
+        android:maxLines="2"
+        android:text="Movie Theather Title"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/movie_theather_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="16dp"
+        android:text="Movie Theater Location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movie_teather_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

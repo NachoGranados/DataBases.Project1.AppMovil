@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
                 openRegisterActivity();
 
             }
+
         });
 
     }
@@ -59,8 +60,28 @@ public class LoginActivity extends AppCompatActivity {
 
             if(row.moveToFirst()) {
 
+                if (row.getString(0).equals(password)) {
+
+                    Toast.makeText(this, "Wellcome to CineTEC", Toast.LENGTH_SHORT).show();
+
+                    sqLiteDatabase.close();
+
+                    idText.setText("");
+                    passwordText.setText("");
+
+                    openMovieTheaterSelectionActivity();
+
+
+                } else {
+
+                    Toast.makeText(this, "Wrong password. Try again", Toast.LENGTH_SHORT).show();
+
+                    passwordText.setText("");
+
+                }
+
                 //String getId = row.getString(0);
-                String getFirstName = row.getString(0);
+                //String getFirstName = row.getString(0);
                 //String getLastName = row.getString(1);
                 //String getSecondLastName = row.getString(2);
                 //String getAge = row.getString(3);
@@ -68,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                 //String getPhoneNumber = row.getString(5);
                 //String getPassword = row.getString(6);
 
-                String info = "FN = " + getFirstName; //+
+                //String info = "FN = " + getFirstName; //+
                               //LN = " + getLastName +
                               //"SLN = " + getSecondLastName +
                               //"A = " + getAge +
@@ -76,15 +97,21 @@ public class LoginActivity extends AppCompatActivity {
                               //"PN = " + getPhoneNumber +
                               //"P = " + getPassword;
 
-                Toast.makeText(this, info, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Correct password", Toast.LENGTH_SHORT).show();
 
-                sqLiteDatabase.close();
+                //sqLiteDatabase.close();
+
+                //idText.setText("");
+                //passwordText.setText("");
 
             } else {
 
                 Toast.makeText(this, "Account not created", Toast.LENGTH_SHORT).show();
 
                 sqLiteDatabase.close();
+
+                idText.setText("");
+                passwordText.setText("");
 
             }
 
@@ -93,6 +120,13 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Complete all the information", Toast.LENGTH_SHORT).show();
 
         }
+
+    }
+
+    private void openMovieTheaterSelectionActivity() {
+
+        Intent intent = new Intent(this, MovieTheaterSelectionActivity.class);
+        startActivity(intent);
 
     }
 
