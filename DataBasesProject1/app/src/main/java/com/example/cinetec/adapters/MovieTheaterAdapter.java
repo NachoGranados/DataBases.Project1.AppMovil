@@ -5,21 +5,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.cinetec.R;
 import com.example.cinetec.models.MovieTheater;
-
 import java.util.List;
 
 public class MovieTheaterAdapter extends RecyclerView.Adapter<MovieTheaterAdapter.MovieTheaterViewHolder> implements View.OnClickListener {
 
-    List<MovieTheater> movieTheaterList;
-
     Context context;
-
+    List<MovieTheater> movieTheaterList;
     private View.OnClickListener onClickListener;
 
     public MovieTheaterAdapter(Context context, List<MovieTheater> movieTheaterList) {
@@ -84,7 +79,7 @@ public class MovieTheaterAdapter extends RecyclerView.Adapter<MovieTheaterAdapte
 
             super(itemView);
 
-            movieTheaterTitle = itemView.findViewById(R.id.movie_teather_title);
+            movieTheaterTitle = itemView.findViewById(R.id.movie_teather_name);
             movieTheaterLocation = itemView.findViewById(R.id.movie_theather_location);
 
         }

@@ -65,6 +65,14 @@ public class LoginActivity extends AppCompatActivity {
 
         });
 
+        if(checkInternetConnection()) {
+
+            postUnsyncInformation();
+
+            refreshDataBase();
+
+        }
+
     }
 
     private void openRegisterActivity() {

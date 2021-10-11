@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -64,12 +65,24 @@ public class MovieTheaterSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(MovieTheaterSelectionActivity.this,"Selection = " + movieTheaterList.get(recyclerView.getChildAdapterPosition(view)).getName(), Toast.LENGTH_SHORT).show();
+                String selectedMovieTheater = movieTheaterList.get(recyclerView.getChildAdapterPosition(view)).getName();
+
+                openMovieSelectionActivity(selectedMovieTheater);
 
             }
         });
 
         recyclerView.setAdapter(movieTheaterAdapter);
+
+    }
+
+    private void openMovieSelectionActivity(String selectedMovieTheater) {
+
+        Intent intent = new Intent(this, MovieSelectionActivity.class);
+
+        intent.putExtra("selectedMovieTheater", selectedMovieTheater);
+
+        startActivity(intent);
 
     }
 

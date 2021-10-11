@@ -11,7 +11,7 @@
     android:background="@drawable/custom_input">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imageViewMovieTheater"
         android:layout_width="105dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -20,13 +20,13 @@
         tools:layout_editor_absoluteY="0dp" />
 
     <TextView
-        android:id="@+id/movie_teather_title"
+        android:id="@+id/movie_teather_name"
         android:layout_width="196dp"
         android:layout_height="45dp"
         android:layout_marginStart="160dp"
         android:layout_marginTop="16dp"
         android:maxLines="2"
-        android:text="Movie Theather Title"
+        android:text="Movie Theather Name"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -41,6 +41,6 @@
         android:layout_marginTop="16dp"
         android:text="Movie Theater Location"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/movie_teather_title" />
+        app:layout_constraintTop_toBottomOf="@+id/movie_teather_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

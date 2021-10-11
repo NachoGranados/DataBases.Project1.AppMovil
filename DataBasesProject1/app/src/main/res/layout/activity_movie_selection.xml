@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#1d1d1d"
-    tools:context=".MovieTheaterSelectionActivity">
+    tools:context=".MovieSelectionActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -22,18 +22,18 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textViewMovieTheaterList"
+                android:id="@+id/textViewMovieList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
-                android:text="MOVIE THEATER LIST"
+                android:text="MOVIE LIST"
                 android:textColor="@color/white"
                 android:textSize="34sp"
                 android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerViewMovieTheater"
+                android:id="@+id/recyclerViewMovie"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="16dp" />
