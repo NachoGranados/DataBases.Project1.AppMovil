@@ -1,9 +1,13 @@
 package com.example.cinetec;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -11,7 +15,11 @@ import com.example.cinetec.adapters.MovieTheaterAdapter;
 import com.example.cinetec.interfaces.MovieTheaterRestAPI;
 import com.example.cinetec.models.MovieTheater;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,52 +46,32 @@ public class MovieTheaterSelectionActivity extends AppCompatActivity {
 
     public void getMovieTheatersInformation() {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
-                 .addConverterFactory(GsonConverterFactory.create()).build();
+        AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
+        SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
 
-        MovieTheaterRestAPI movieTheaterRestAPI = retrofit.create(MovieTheaterRestAPI.class);
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM MOVIE_THEATER", null);
 
-        Call<List<MovieTheater>> call = movieTheaterRestAPI.getMovieTheaters();
-        call.enqueue(new Callback<List<MovieTheater>>() {
+        List<MovieTheater> movieTheaterList = new ArrayList<>();
 
-            @Override
-            public void onResponse(Call<List<MovieTheater>> call, Response<List<MovieTheater>> response) {
+        while(cursor.moveToNext()) {
 
-                try {
+            String name = cursor.getString(0);
+            String location = cursor.getString(1);
+            String cinemaAmount = cursor.getString(2);
 
-                    if (response.isSuccessful()) {
+            MovieTheater movieTheater = new MovieTheater();
 
-                        //Toast.makeText(MovieTheaterSelectionActivity.this, "Successful Movie Theaters GET", Toast.LENGTH_SHORT).show();
+            movieTheater.setName(name);
+            movieTheater.setLocation(location);
+            movieTheater.setCinemaAmount(Integer.parseInt(cinemaAmount));
 
-                        List<MovieTheater> movieTheaterList = response.body();
+            movieTheaterList.add(movieTheater);
 
-                        MovieTheaterAdapter movieTheaterAdapter = new MovieTheaterAdapter(MovieTheaterSelectionActivity.this, movieTheaterList);
+        }
 
-                        recyclerView.setAdapter(movieTheaterAdapter);
+        MovieTheaterAdapter movieTheaterAdapter = new MovieTheaterAdapter(MovieTheaterSelectionActivity.this, movieTheaterList);
 
-                    } else {
-
-                        //Toast.makeText(MovieTheaterSelectionActivity.this, "Unsuccessful Movie Theaters GET", Toast.LENGTH_SHORT).show();
-
-                        return;
-
-                    }
-
-                } catch (Exception exception) {
-
-                    Toast.makeText(MovieTheaterSelectionActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<List<MovieTheater>> call, Throwable t) {
-
-                Toast.makeText(MovieTheaterSelectionActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        recyclerView.setAdapter(movieTheaterAdapter);
 
     }
 
