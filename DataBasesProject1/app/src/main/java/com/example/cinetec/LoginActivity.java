@@ -311,8 +311,6 @@ public class LoginActivity extends AppCompatActivity {
 
             Client client = clientList.get(i);
 
-            Toast.makeText(LoginActivity.this, client.getFirstName(), Toast.LENGTH_SHORT).show();
-
             ContentValues contentValues = new ContentValues();
 
             contentValues.put("ID", client.getId());

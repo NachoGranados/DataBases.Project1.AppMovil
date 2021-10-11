@@ -1,7 +1,5 @@
 package com.example.cinetec;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,23 +7,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.cinetec.adapters.MovieTheaterAdapter;
-import com.example.cinetec.interfaces.MovieTheaterRestAPI;
 import com.example.cinetec.models.MovieTheater;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MovieTheaterSelectionActivity extends AppCompatActivity {
 
@@ -70,6 +59,15 @@ public class MovieTheaterSelectionActivity extends AppCompatActivity {
         }
 
         MovieTheaterAdapter movieTheaterAdapter = new MovieTheaterAdapter(MovieTheaterSelectionActivity.this, movieTheaterList);
+
+        movieTheaterAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(MovieTheaterSelectionActivity.this,"Selection = " + movieTheaterList.get(recyclerView.getChildAdapterPosition(view)).getName(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
         recyclerView.setAdapter(movieTheaterAdapter);
 

@@ -14,11 +14,13 @@ import com.example.cinetec.models.MovieTheater;
 
 import java.util.List;
 
-public class MovieTheaterAdapter extends RecyclerView.Adapter<MovieTheaterAdapter.MovieTheaterViewHolder> {
+public class MovieTheaterAdapter extends RecyclerView.Adapter<MovieTheaterAdapter.MovieTheaterViewHolder> implements View.OnClickListener {
 
     List<MovieTheater> movieTheaterList;
 
     Context context;
+
+    private View.OnClickListener onClickListener;
 
     public MovieTheaterAdapter(Context context, List<MovieTheater> movieTheaterList) {
 
@@ -32,6 +34,8 @@ public class MovieTheaterAdapter extends RecyclerView.Adapter<MovieTheaterAdapte
     public MovieTheaterViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.movie_theater_item, parent, false);
+
+        view.setOnClickListener(this);
 
         return new MovieTheaterViewHolder(view);
 
@@ -51,6 +55,23 @@ public class MovieTheaterAdapter extends RecyclerView.Adapter<MovieTheaterAdapte
     public int getItemCount() {
 
         return movieTheaterList.size();
+
+    }
+
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+
+        this.onClickListener = onClickListener;
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        if(onClickListener != null) {
+
+            onClickListener.onClick(view);
+
+        }
 
     }
 
