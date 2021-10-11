@@ -2,19 +2,30 @@ package com.example.cinetec;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.cinetec.interfaces.ClientRestAPI;
+import com.example.cinetec.models.Client;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private EditText idText;
     private EditText firstNameText;
     private EditText lastNameText;
-    private EditText secondLastNameText;
+    private EditText secLastNameText;
     private EditText ageText;
     private EditText birthDateText;
     private EditText phoneNumberText;
@@ -28,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
         idText = findViewById(R.id.editTextRegisterID);
         firstNameText = findViewById(R.id.editTextRegisterFirstName);
         lastNameText = findViewById(R.id.editTextRegisterLastName);
-        secondLastNameText = findViewById(R.id.editTextRegisterSecondLastName);
+        secLastNameText = findViewById(R.id.editTextRegisterSecondLastName);
         ageText = findViewById(R.id.editTextRegisterAge);
         birthDateText = findViewById(R.id.editTextRegisterBirthDate);
         phoneNumberText = findViewById(R.id.editTextRegisterPhoneNumber);
@@ -44,34 +55,59 @@ public class RegisterActivity extends AppCompatActivity {
         String id = idText.getText().toString();
         String firstName = firstNameText.getText().toString();
         String lastName = lastNameText.getText().toString();
-        String secondLastName = secondLastNameText.getText().toString();
+        String secLastName = secLastNameText.getText().toString();
         String age = ageText.getText().toString();
         String birthDate = birthDateText.getText().toString();
         String phoneNumber = phoneNumberText.getText().toString();
         String password = passwordText.getText().toString();
 
-        if(!id.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty() && !secondLastName.isEmpty() && !age.isEmpty() && !birthDate.isEmpty() &&
+        if(!id.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty() && !secLastName.isEmpty() && !age.isEmpty() && !birthDate.isEmpty() &&
            !phoneNumber.isEmpty() && !password.isEmpty()) {
 
-            ContentValues register = new ContentValues();
+            ContentValues contentValues = new ContentValues();
 
-            register.put("ID", id);
-            register.put("First_name", firstName);
-            register.put("Last_name", lastName);
-            register.put("Sec_last_name", secondLastName);
-            register.put("Age", age);
-            register.put("Birth_date", birthDate);
-            register.put("Phone_number", phoneNumber);
-            register.put("Password", password);
+            contentValues.put("ID", Integer.parseInt(id));
+            contentValues.put("First_name", firstName);
+            contentValues.put("Last_name", lastName);
+            contentValues.put("Sec_last_name", secLastName);
+            contentValues.put("Age", Integer.parseInt(age));
+            contentValues.put("Birth_date", birthDate);
+            contentValues.put("Phone_number", phoneNumber);
+            contentValues.put("Password", password);
 
-            sqLiteDatabase.insert("CLIENT", null, register);
+            if(checkInternetConnection()) {
+
+                contentValues.put("Sync_status", "1");
+
+                Client client = new Client();
+
+                client.setId(Integer.parseInt(id));
+                client.setFirstName(firstName);
+                client.setLastName(lastName);
+                client.setSecLastName(secLastName);
+                client.setAge(Integer.parseInt(age));
+                client.setBirthDate(birthDate);
+                client.setPhoneNumber(phoneNumber);
+                client.setPassword(password);
+
+                postClient(client);
+
+            } else {
+
+                contentValues.put("Sync_status", "0");
+
+                // REVISAR SI YA EXISTE EL ID**************************************************************************************************************************************************************************
+
+            }
+
+            sqLiteDatabase.insert("CLIENT", null, contentValues);
 
             sqLiteDatabase.close();
 
             idText.setText("");
             firstNameText.setText("");
             lastNameText.setText("");
-            secondLastNameText.setText("");
+            secLastNameText.setText("");
             ageText.setText("");
             birthDateText.setText("");
             phoneNumberText.setText("");
@@ -89,10 +125,59 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    public void openLoginActivity() {
+    private void openLoginActivity() {
 
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+
+    }
+
+    private boolean checkInternetConnection() {
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return (networkInfo != null && networkInfo.isConnected());
+
+    }
+
+    private void postClient(Client client) {
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        ClientRestAPI clientRestAPI = retrofit.create(ClientRestAPI.class);
+
+        Call<Client> call = clientRestAPI.postClient(client);
+        call.enqueue(new Callback<Client>() {
+            @Override
+            public void onResponse(Call<Client> call, retrofit2.Response<Client> response) {
+
+                try {
+
+                    if (response.isSuccessful()) {
+
+
+                        //Toast.makeText(RegisterActivity.this, "API Register Failed", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                } catch (Exception exception) {
+
+                    //Toast.makeText(RegisterActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Client> call, Throwable t) {
+
+                //Toast.makeText(RegisterActivity.this, "Connection Failed", Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
     }
 

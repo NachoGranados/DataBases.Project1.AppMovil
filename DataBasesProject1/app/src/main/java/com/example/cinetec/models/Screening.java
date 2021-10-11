@@ -2,25 +2,25 @@ package com.example.cinetec.models;
 
 public class Screening {
 
-    private String id;
-    private String cinemaNumber;
+    private int id;
+    private int cinemaNumber;
     private String movieOriginalName;
-    private String hour;
-    private String capacity;
+    private int hour;
+    private int capacity;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getCinemaNumber() {
+    public int getCinemaNumber() {
         return cinemaNumber;
     }
 
-    public void setCinemaNumber(String cinemaNumber) {
+    public void setCinemaNumber(int cinemaNumber) {
         this.cinemaNumber = cinemaNumber;
     }
 
@@ -32,19 +32,19 @@ public class Screening {
         this.movieOriginalName = movieOriginalName;
     }
 
-    public String getHour() {
+    public int getHour() {
         return hour;
     }
 
-    public void setHour(String hour) {
+    public void setHour(int hour) {
         this.hour = hour;
     }
 
-    public String getCapacity() {
+    public int getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(String capacity) {
+    public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
 }

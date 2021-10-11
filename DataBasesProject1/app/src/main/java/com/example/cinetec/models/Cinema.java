@@ -2,33 +2,42 @@ package com.example.cinetec.models;
 
 public class Cinema {
 
-    private String number;
-    private String rows;
-    private String columns;
+    private int number;
+    private int rows;
+    private int columns;
+    private int capacity;
     private String nameMovieTheater;
 
-    public String getNumber() {
+    public int getNumber() {
         return number;
     }
 
-    public void setNumber(String number) {
+    public void setNumber(int number) {
         this.number = number;
     }
 
-    public String getRows() {
+    public int getRows() {
         return rows;
     }
 
-    public void setRows(String rows) {
+    public void setRows(int rows) {
         this.rows = rows;
     }
 
-    public String getColumns() {
+    public int getColumns() {
         return columns;
     }
 
-    public void setColumns(String columns) {
+    public void setColumns(int columns) {
         this.columns = columns;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
     public String getNameMovieTheater() {

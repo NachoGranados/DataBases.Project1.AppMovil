@@ -32,11 +32,11 @@ public class MovieTheaterSelectionActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        getMovieTheaterInformation();
+        getMovieTheatersInformation();
 
     }
 
-    public void getMovieTheaterInformation() {
+    public void getMovieTheatersInformation() {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
                  .addConverterFactory(GsonConverterFactory.create()).build();
@@ -53,7 +53,7 @@ public class MovieTheaterSelectionActivity extends AppCompatActivity {
 
                     if (response.isSuccessful()) {
 
-                        Toast.makeText(MovieTheaterSelectionActivity.this, "Successful Movie Theaters GET", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MovieTheaterSelectionActivity.this, "Successful Movie Theaters GET", Toast.LENGTH_SHORT).show();
 
                         List<MovieTheater> movieTheaterList = response.body();
 
@@ -63,7 +63,7 @@ public class MovieTheaterSelectionActivity extends AppCompatActivity {
 
                     } else {
 
-                        Toast.makeText(MovieTheaterSelectionActivity.this, "Unsuccessful Movie Theaters GET", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(MovieTheaterSelectionActivity.this, "Unsuccessful Movie Theaters GET", Toast.LENGTH_SHORT).show();
 
                         return;
 

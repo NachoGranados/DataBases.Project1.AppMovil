@@ -7,7 +7,7 @@ public class Movie {
     private String name;
     private String director;
     private String imageUrl;
-    private String lenght;
+    private int lenght;
 
     public String getOriginalName() {
         return originalName;
@@ -49,11 +49,11 @@ public class Movie {
         this.imageUrl = imageUrl;
     }
 
-    public String getLenght() {
+    public int getLenght() {
         return lenght;
     }
 
-    public void setLenght(String lenght) {
+    public void setLenght(int lenght) {
         this.lenght = lenght;
     }
 }

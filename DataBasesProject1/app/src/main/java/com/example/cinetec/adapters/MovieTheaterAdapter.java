@@ -70,16 +70,4 @@ public class MovieTheaterAdapter extends RecyclerView.Adapter<MovieTheaterAdapte
 
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
 }

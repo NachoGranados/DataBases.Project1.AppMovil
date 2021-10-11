@@ -8,12 +8,13 @@
     android:layout_marginTop="8dp"
     android:layout_marginRight="16dp"
     android:layout_marginBottom="8dp"
-    android:background="#2d2d2d">
+    android:background="@drawable/custom_input">
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="144dp"
+        android:layout_width="105dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/movie_theater_image"
         tools:layout_editor_absoluteY="0dp" />

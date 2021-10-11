@@ -2,20 +2,20 @@ package com.example.cinetec.models;
 
 public class Client {
 
-    private String id;
+    private int id;
     private String firstName;
     private String lastName;
-    private String secondLastName;
-    private String age;
+    private String secLastName;
+    private int age;
     private String birthDate;
     private String phoneNumber;
     private String password;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -35,19 +35,19 @@ public class Client {
         this.lastName = lastName;
     }
 
-    public String getSecondLastName() {
-        return secondLastName;
+    public String getSecLastName() {
+        return secLastName;
     }
 
-    public void setSecondLastName(String secondLastName) {
-        this.secondLastName = secondLastName;
+    public void setSecLastName(String secLastName) {
+        this.secLastName = secLastName;
     }
 
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
@@ -74,4 +74,5 @@ public class Client {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

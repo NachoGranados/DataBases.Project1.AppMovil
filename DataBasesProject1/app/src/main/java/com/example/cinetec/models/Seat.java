@@ -2,33 +2,32 @@ package com.example.cinetec.models;
 
 public class Seat {
 
-    private String screeningId;
-    private String rowNum;
-    private String columnNum;
+    private int screeningId;
+    private int rowNum;
+    private int columnNum;
     private String state;
-    private String screening;
 
-    public String getScreeningId() {
+    public int getScreeningId() {
         return screeningId;
     }
 
-    public void setScreeningId(String screeningId) {
+    public void setScreeningId(int screeningId) {
         this.screeningId = screeningId;
     }
 
-    public String getRowNum() {
+    public int getRowNum() {
         return rowNum;
     }
 
-    public void setRowNum(String rowNum) {
+    public void setRowNum(int rowNum) {
         this.rowNum = rowNum;
     }
 
-    public String getColumnNum() {
+    public int getColumnNum() {
         return columnNum;
     }
 
-    public void setColumnNum(String columnNum) {
+    public void setColumnNum(int columnNum) {
         this.columnNum = columnNum;
     }
 
@@ -40,11 +39,4 @@ public class Seat {
         this.state = state;
     }
 
-    public String getScreening() {
-        return screening;
-    }
-
-    public void setScreening(String screening) {
-        this.screening = screening;
-    }
 }

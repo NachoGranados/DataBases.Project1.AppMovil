@@ -4,7 +4,7 @@ public class MovieTheater {
 
     private String name;
     private String location;
-    private String cinemaAmount;
+    private int cinemaAmount;
 
     public String getName() {
         return name;
@@ -22,11 +22,11 @@ public class MovieTheater {
         this.location = location;
     }
 
-    public String getCinemaAmount() {
+    public int getCinemaAmount() {
         return cinemaAmount;
     }
 
-    public void setCinemaAmount(String cinemaAmount) {
+    public void setCinemaAmount(int cinemaAmount) {
         this.cinemaAmount = cinemaAmount;
     }
 }
