@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -64,58 +65,79 @@ public class RegisterActivity extends AppCompatActivity {
         if(!id.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty() && !secLastName.isEmpty() && !age.isEmpty() && !birthDate.isEmpty() &&
            !phoneNumber.isEmpty() && !password.isEmpty()) {
 
-            ContentValues contentValues = new ContentValues();
+            Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM CLIENT WHERE ID =" + id, null);
 
-            contentValues.put("ID", Integer.parseInt(id));
-            contentValues.put("First_name", firstName);
-            contentValues.put("Last_name", lastName);
-            contentValues.put("Sec_last_name", secLastName);
-            contentValues.put("Age", Integer.parseInt(age));
-            contentValues.put("Birth_date", birthDate);
-            contentValues.put("Phone_number", phoneNumber);
-            contentValues.put("Password", password);
+            if(cursor.moveToFirst()) {
 
-            if(checkInternetConnection()) {
+                Toast.makeText(this, "Account already created. Try Again", Toast.LENGTH_SHORT).show();
 
-                contentValues.put("Sync_status", "1");
+                idText.setText("");
+                firstNameText.setText("");
+                lastNameText.setText("");
+                secLastNameText.setText("");
+                ageText.setText("");
+                birthDateText.setText("");
+                phoneNumberText.setText("");
+                passwordText.setText("");
 
-                Client client = new Client();
-
-                client.setId(Integer.parseInt(id));
-                client.setFirstName(firstName);
-                client.setLastName(lastName);
-                client.setSecLastName(secLastName);
-                client.setAge(Integer.parseInt(age));
-                client.setBirthDate(birthDate);
-                client.setPhoneNumber(phoneNumber);
-                client.setPassword(password);
-
-                postClient(client);
+                sqLiteDatabase.close();
 
             } else {
 
-                contentValues.put("Sync_status", "0");
+                ContentValues contentValues = new ContentValues();
 
-                // REVISAR SI YA EXISTE EL ID**************************************************************************************************************************************************************************
+                contentValues.put("ID", Integer.parseInt(id));
+                contentValues.put("First_name", firstName);
+                contentValues.put("Last_name", lastName);
+                contentValues.put("Sec_last_name", secLastName);
+                contentValues.put("Age", Integer.parseInt(age));
+                contentValues.put("Birth_date", birthDate);
+                contentValues.put("Phone_number", phoneNumber);
+                contentValues.put("Password", password);
+
+                if(checkInternetConnection()) {
+
+                    contentValues.put("Sync_status", "1");
+
+                    sqLiteDatabase.insert("CLIENT", null, contentValues);
+
+                    Client client = new Client();
+
+                    client.setId(Integer.parseInt(id));
+                    client.setFirstName(firstName);
+                    client.setLastName(lastName);
+                    client.setSecLastName(secLastName);
+                    client.setAge(Integer.parseInt(age));
+                    client.setBirthDate(birthDate);
+                    client.setPhoneNumber(phoneNumber);
+                    client.setPassword(password);
+
+                    postClient(client);
+
+                } else {
+
+                    contentValues.put("Sync_status", "0");
+
+                    sqLiteDatabase.insert("CLIENT", null, contentValues);
+
+                }
+
+                Toast.makeText(this, "Successful register", Toast.LENGTH_SHORT).show();
+
+                sqLiteDatabase.close();
+
+                idText.setText("");
+                firstNameText.setText("");
+                lastNameText.setText("");
+                secLastNameText.setText("");
+                ageText.setText("");
+                birthDateText.setText("");
+                phoneNumberText.setText("");
+                passwordText.setText("");
+
+                openLoginActivity();
 
             }
-
-            sqLiteDatabase.insert("CLIENT", null, contentValues);
-
-            sqLiteDatabase.close();
-
-            idText.setText("");
-            firstNameText.setText("");
-            lastNameText.setText("");
-            secLastNameText.setText("");
-            ageText.setText("");
-            birthDateText.setText("");
-            phoneNumberText.setText("");
-            passwordText.setText("");
-
-            Toast.makeText(this, "Successful register", Toast.LENGTH_SHORT).show();
-
-            openLoginActivity();
 
         } else {
 
