@@ -4,11 +4,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.cinetec.R;
 import com.example.cinetec.models.Movie;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> implements View.OnClickListener {
@@ -45,6 +48,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.movieGendre.setText(movie.getGendre());
         holder.movieLenght.setText(Integer.toString(movie.getLenght()));
 
+        Picasso.with(context).load(movie.getImageUrl()).into(holder.movieImage);
+
+        //Picasso.with(context).load("https://static.metacritic.com/images/products/movies/4/895501b7c879f8b8b236524db91ee9ab.jpg").into(holder.movieImage);
+
     }
 
     @Override
@@ -76,6 +83,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         TextView movieOriginalName;
         TextView movieGendre;
         TextView movieLenght;
+        ImageView movieImage;
 
         public MovieViewHolder(@NonNull View itemView) {
 
@@ -84,6 +92,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             movieOriginalName = itemView.findViewById(R.id.movie_original_name);
             movieGendre = itemView.findViewById(R.id.movie_gendre);
             movieLenght = itemView.findViewById(R.id.movie_lenght);
+            movieImage = itemView.findViewById(R.id.imageViewMovie);
 
         }
 
