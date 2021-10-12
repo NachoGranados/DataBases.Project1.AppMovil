@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="16dp"
-                android:text="MOVIE LIST"
+                android:text="Movie List"
                 android:textColor="@color/white"
                 android:textSize="34sp"
                 android:textStyle="bold" />

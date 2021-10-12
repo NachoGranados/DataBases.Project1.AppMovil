@@ -22,7 +22,7 @@ public class AdministratorSQLiteOpenHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL("CREATE TABLE MOVIE_THEATER(Name VARCHAR(20) PRIMARY KEY, Location VARCHAR(20), Cinema_amount INT)");
 
-        sqLiteDatabase.execSQL("CREATE TABLE CINEMA(Number INT PRIMARY KEY, Rows INT, Columns INT, Capacity INT, Name_movie_theater  VARCHAR(20))");
+        sqLiteDatabase.execSQL("CREATE TABLE CINEMA(Number INT PRIMARY KEY, Rows INT, Columns INT, Capacity INT, Name_movie_theater VARCHAR(20))");
 
         sqLiteDatabase.execSQL("CREATE TABLE MOVIE(Original_name VARCHAR(20) PRIMARY KEY, Gendre VARCHAR(20), Name VARCHAR(20), Director VARCHAR(20)," +
                                                   "Image_url VARCHAR(350), Lenght INT)");
@@ -65,7 +65,7 @@ public class AdministratorSQLiteOpenHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL("CREATE TABLE MOVIE_THEATER(Name VARCHAR(20) PRIMARY KEY, Location VARCHAR(20), Cinema_amount INT)");
 
-        sqLiteDatabase.execSQL("CREATE TABLE CINEMA(Number INT PRIMARY KEY, Rows INT, Columns INT, Capacity INT, Name_movie_theater  VARCHAR(20))");
+        sqLiteDatabase.execSQL("CREATE TABLE CINEMA(Number INT PRIMARY KEY, Rows INT, Columns INT, Capacity INT, Name_movie_theater VARCHAR(20))");
 
         sqLiteDatabase.execSQL("CREATE TABLE MOVIE(Original_name VARCHAR(20) PRIMARY KEY, Gendre VARCHAR(20), Name VARCHAR(20), Director VARCHAR(20)," +
                                              "Image_url VARCHAR(350), Lenght INT)");

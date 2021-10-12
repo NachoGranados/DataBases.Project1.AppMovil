@@ -3,17 +3,14 @@ package com.example.cinetec;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
-
+import android.widget.TextView;
 import com.example.cinetec.adapters.MovieAdapter;
-import com.example.cinetec.adapters.MovieTheaterAdapter;
 import com.example.cinetec.models.Movie;
-import com.example.cinetec.models.MovieTheater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +18,8 @@ import java.util.List;
 public class MovieSelectionActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
+
+    private TextView movieList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +34,15 @@ public class MovieSelectionActivity extends AppCompatActivity {
 
         String selectedMovieTheater = bundle.getString("selectedMovieTheater");
 
-        getMoviesInformation();
+        movieList = findViewById(R.id.textViewMovieList);
+
+        movieList.setText(selectedMovieTheater + " Movie List");
+
+        getMoviesInformation(selectedMovieTheater);
 
     }
 
-    private void getMoviesInformation() {
+    private void getMoviesInformation(String selectedMovieTheater) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
@@ -76,7 +79,10 @@ public class MovieSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(MovieSelectionActivity.this,"Selection = " + movieList.get(recyclerView.getChildAdapterPosition(view)).getName(), Toast.LENGTH_SHORT).show();
+                String selectedMovieOriginalName = movieList.get(recyclerView.getChildAdapterPosition(view)).getOriginalName();
+                String selectedMovieImageURL = movieList.get(recyclerView.getChildAdapterPosition(view)).getImageUrl();
+
+                openScreeningSelectionActivity(selectedMovieTheater, selectedMovieOriginalName, selectedMovieImageURL);
 
             }
         });
@@ -85,5 +91,16 @@ public class MovieSelectionActivity extends AppCompatActivity {
 
     }
 
+    private void openScreeningSelectionActivity(String selectedMovieTheater, String selectedMovieOriginalName, String selectedMovieImageURL) {
+
+        Intent intent = new Intent(this, ScreeningSelectionActivity.class);
+
+        intent.putExtra("selectedMovieTheater", selectedMovieTheater);
+        intent.putExtra("selectedMovieOriginalName", selectedMovieOriginalName);
+        intent.putExtra("selectedMovieImageURL", selectedMovieImageURL);
+
+        startActivity(intent);
+
+    }
 
 }

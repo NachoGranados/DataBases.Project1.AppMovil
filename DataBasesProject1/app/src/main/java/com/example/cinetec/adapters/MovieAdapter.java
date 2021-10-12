@@ -45,8 +45,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         Movie movie = movieList.get(position);
 
         holder.movieOriginalName.setText(movie.getOriginalName());
-        holder.movieGendre.setText(movie.getGendre());
-        holder.movieLenght.setText(Integer.toString(movie.getLenght()));
+        holder.movieGendre.setText("Gendre: " + movie.getGendre());
+        holder.movieLenght.setText("Lenght: " + Integer.toString(movie.getLenght()) + " min");
 
         Picasso.with(context).load(movie.getImageUrl()).into(holder.movieImage);
 
@@ -92,7 +92,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             movieOriginalName = itemView.findViewById(R.id.movie_original_name);
             movieGendre = itemView.findViewById(R.id.movie_gendre);
             movieLenght = itemView.findViewById(R.id.movie_lenght);
-            movieImage = itemView.findViewById(R.id.imageViewMovie);
+            movieImage = itemView.findViewById(R.id.imageViewMovieMovie);
 
         }
 

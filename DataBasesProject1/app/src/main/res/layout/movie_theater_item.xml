@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="400px"
+    android:layout_height="450px"
     android:layout_marginLeft="16dp"
     android:layout_marginTop="8dp"
     android:layout_marginRight="16dp"
@@ -12,7 +12,7 @@
 
     <ImageView
         android:id="@+id/imageViewMovieTheater"
-        android:layout_width="105dp"
+        android:layout_width="119dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,10 +25,10 @@
         android:layout_height="45dp"
         android:layout_marginStart="160dp"
         android:layout_marginTop="16dp"
-        android:maxLines="2"
+        android:maxLines="1"
         android:text="Movie Theather Name"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,8 +38,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:text="Movie Theater Location"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/movie_teather_name" />
 

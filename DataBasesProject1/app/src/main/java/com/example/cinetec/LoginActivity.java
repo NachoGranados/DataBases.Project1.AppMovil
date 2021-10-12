@@ -465,7 +465,7 @@ public class LoginActivity extends AppCompatActivity {
             contentValues.put("Rows", cinema.getRows());
             contentValues.put("Columns", cinema.getColumns());
             contentValues.put("Capacity", cinema.getCapacity());
-            contentValues.put("Name_movie_theater", cinema.getNumber());
+            contentValues.put("Name_movie_theater", cinema.getNameMovieTheater());
 
             sqLiteDatabase.insert("CINEMA", null, contentValues);
 

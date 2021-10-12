@@ -11,7 +11,7 @@
     android:background="@drawable/custom_input">
 
     <ImageView
-        android:id="@+id/imageViewMovieMovie"
+        android:id="@+id/imageViewScreening"
         android:layout_width="105dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -20,10 +20,10 @@
         tools:layout_editor_absoluteY="0dp" />
 
     <TextView
-        android:id="@+id/movie_original_name"
+        android:id="@+id/screening_movie_original_name"
         android:layout_width="202dp"
         android:layout_height="43dp"
-        android:layout_marginStart="130dp"
+        android:layout_marginStart="125dp"
         android:layout_marginTop="16dp"
         android:maxLines="1"
         android:text="Movie Title"
@@ -35,25 +35,36 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/movie_lenght"
+        android:id="@+id/screening_cinema_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="155dp"
-        android:layout_marginTop="16dp"
-        android:text="Movie Lenght"
+        android:layout_marginTop="12dp"
+        android:text="Cinema Number"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/movie_gendre" />
+        app:layout_constraintTop_toBottomOf="@+id/screening_movie_original_name" />
 
     <TextView
-        android:id="@+id/movie_gendre"
+        android:id="@+id/screening_capacity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="155dp"
-        android:layout_marginTop="24dp"
-        android:text="Movie Gendre"
+        android:layout_marginTop="8dp"
+        android:text="Screening Capacity"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/movie_original_name" />
+        app:layout_constraintTop_toBottomOf="@+id/screening_hour" />
+
+    <TextView
+        android:id="@+id/screening_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="155dp"
+        android:layout_marginTop="8dp"
+        android:text="Screening Hour"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/screening_cinema_number" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
