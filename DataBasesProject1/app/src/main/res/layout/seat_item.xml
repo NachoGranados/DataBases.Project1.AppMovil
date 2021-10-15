@@ -23,7 +23,7 @@
             android:layout_width="105dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/green_seat"
+            app:srcCompat="@drawable/white_seat"
             tools:layout_editor_absoluteY="0dp" />
 
         <LinearLayout

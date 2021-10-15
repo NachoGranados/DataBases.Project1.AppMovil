@@ -16,10 +16,10 @@ import com.example.cinetec.models.Seat;
 import java.util.List;
 
 public class SeatHorizontalAdapter extends RecyclerView.Adapter<SeatHorizontalAdapter.SeatHorizontalViewHolder> {
+
     Context context;
     List<Seat> seatList;
     SeatSelectionActivity seatSelectionActivity;
-    private View.OnClickListener onClickListener;
 
     public SeatHorizontalAdapter(Context context, List<Seat> seatList, SeatSelectionActivity seatSelectionActivity) {
 
@@ -59,6 +59,14 @@ public class SeatHorizontalAdapter extends RecyclerView.Adapter<SeatHorizontalAd
         } else if(seat.getState().equals("restricted")) {
 
             holder.seatImage.setImageResource(R.drawable.red_seat);
+
+        } else if(seat.getState().equals("selected")) {
+
+            seat.setState("free");
+
+            holder.state.setText("State: " + seat.getState());
+
+            holder.seatImage.setImageResource(R.drawable.yellow_seat);
 
         }
 

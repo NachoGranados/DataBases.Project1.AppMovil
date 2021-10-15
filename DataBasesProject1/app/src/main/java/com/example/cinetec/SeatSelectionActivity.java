@@ -26,7 +26,7 @@ public class SeatSelectionActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewVertical;
 
-    private List<Seat> selectedSeatList = new ArrayList<>();
+    private static List<Seat> selectedSeatList;
 
     private Button continueButton;
 
@@ -39,22 +39,27 @@ public class SeatSelectionActivity extends AppCompatActivity {
         recyclerViewVertical.setHasFixedSize(true);
         recyclerViewVertical.setLayoutManager(new LinearLayoutManager(this));
 
+        selectedSeatList = new ArrayList<>();
+
+        Bundle bundle = getIntent().getExtras();
+
+        String selectedMovieTheater = bundle.getString("selectedMovieTheater");
+        String selectedMovieOriginalName = bundle.getString("selectedMovieOriginalName");
+        String selectedScreeningId = bundle.getString("selectedScreeningId");
+        String selectedMovieImageURL = bundle.getString("selectedMovieImageURL");
+        int rows = Integer.parseInt(bundle.getString("rows"));
+        int columns = Integer.parseInt(bundle.getString("columns"));
+
         continueButton = findViewById(R.id.buttonSeatList);
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                openConfirmationActivity();
+                openConfirmationActivity(selectedMovieTheater, selectedMovieOriginalName, selectedScreeningId, selectedMovieImageURL);
 
             }
 
         });
-
-        Bundle bundle = getIntent().getExtras();
-
-        String selectedScreeningId = bundle.getString("selectedScreeningId");
-        int rows = Integer.parseInt(bundle.getString("rows"));
-        int columns = Integer.parseInt(bundle.getString("columns"));
 
         getSeatsInformation(selectedScreeningId, rows, columns);
 
@@ -140,19 +145,53 @@ public class SeatSelectionActivity extends AppCompatActivity {
 
     public void addSelectedSeat(Seat seat) {
 
-        selectedSeatList.add(seat);
+        if(!selectedSeatList.contains(seat)) {
+
+            selectedSeatList.add(seat);
+
+        }
+
+        //selectedSeatList.add(seat);
 
     }
 
     public void deleteSelectedSeat(Seat seat) {
 
-        selectedSeatList.remove(seat);
+        if(selectedSeatList.contains(seat)) {
+
+            selectedSeatList.remove(seat);
+
+        }
+
+        //selectedSeatList.remove(seat);
 
     }
 
-    public void openConfirmationActivity() {
+    public static List<Seat> getSelectedSeatList() {
+
+        return selectedSeatList;
+
+    }
+
+    public static void setSelectedSeatList(List<Seat> selectedSeatList) {
+
+        SeatSelectionActivity.selectedSeatList = selectedSeatList;
+
+    }
+
+    public void openConfirmationActivity(String selectedMovieTheater, String selectedMovieOriginalName, String selectedScreeningId, String selectedMovieImageURL) {
 
         Intent intent = new Intent(this, ConfirmationActivity.class);
+
+        intent.putExtra("selectedMovieTheater", selectedMovieTheater);
+        intent.putExtra("selectedMovieOriginalName", selectedMovieOriginalName);
+        intent.putExtra("selectedScreeningId", selectedScreeningId);
+        intent.putExtra("selectedMovieImageURL", selectedMovieImageURL);
+
+        //String selectedSeatListString = selectedSeatList.toString();
+
+        //intent.putExtra("selectedSeatList", selectedSeatListString);
+
         startActivity(intent);
 
     }

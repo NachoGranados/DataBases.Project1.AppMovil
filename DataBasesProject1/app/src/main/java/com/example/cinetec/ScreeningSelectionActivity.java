@@ -114,14 +114,12 @@ public class ScreeningSelectionActivity extends AppCompatActivity {
 
                 String selectedScreeningCinemaNumber = Integer.toString(screeningList.get(recyclerView.getChildAdapterPosition(view)).getCinemaNumber());
 
-                //Toast.makeText(ScreeningSelectionActivity.this,"Selection = " + selectedScreeningId, Toast.LENGTH_SHORT).show();
-
                 String[] result = getRowNumber(selectedScreeningCinemaNumber);
 
                 String rows = result[0];
                 String columns = result[1];
 
-                openSeatSelectionActivity(selectedScreeningId, rows, columns);
+                openSeatSelectionActivity(selectedMovieTheater, selectedMovieOriginalName, selectedScreeningId, selectedMovieImageURL, rows, columns);
 
             }
 
@@ -157,11 +155,14 @@ public class ScreeningSelectionActivity extends AppCompatActivity {
 
     }
 
-    private void openSeatSelectionActivity(String selectedScreeningId, String rows, String columns) {
+    private void openSeatSelectionActivity(String selectedMovieTheater, String selectedMovieOriginalName, String selectedScreeningId, String selectedMovieImageURL, String rows, String columns) {
 
         Intent intent = new Intent(this, SeatSelectionActivity.class);
 
+        intent.putExtra("selectedMovieTheater", selectedMovieTheater);
+        intent.putExtra("selectedMovieOriginalName", selectedMovieOriginalName);
         intent.putExtra("selectedScreeningId", selectedScreeningId);
+        intent.putExtra("selectedMovieImageURL", selectedMovieImageURL);
         intent.putExtra("rows", rows);
         intent.putExtra("columns", columns);
 
