@@ -4,12 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.cinetec.R;
+import com.example.cinetec.SeatSelectionActivity;
 import com.example.cinetec.models.Seat;
 import com.example.cinetec.models.SeatList;
 
@@ -19,11 +18,13 @@ public class SeatVerticalAdapter extends RecyclerView.Adapter<SeatVerticalAdapte
 
     Context context;
     List<SeatList> seatListList;
+    SeatSelectionActivity seatSelectionActivity;
 
-    public SeatVerticalAdapter(Context context, List<SeatList> seatListList) {
+    public SeatVerticalAdapter(Context context, List<SeatList> seatListList, SeatSelectionActivity seatSelectionActivity) {
 
         this.context = context;
         this.seatListList = seatListList;
+        this.seatSelectionActivity = seatSelectionActivity;
 
     }
 
@@ -42,7 +43,9 @@ public class SeatVerticalAdapter extends RecyclerView.Adapter<SeatVerticalAdapte
 
         List<Seat> seatList = seatListList.get(position).getSeatList();
 
-        SeatHorizontalAdapter seatHorizontalAdapter = new SeatHorizontalAdapter(context, seatList);
+        SeatHorizontalAdapter seatHorizontalAdapter = new SeatHorizontalAdapter(context, seatList, seatSelectionActivity);
+
+        //Toast.makeText(context, Integer.toString(seatSelectionActivity.getRowSelected()), Toast.LENGTH_SHORT).show();
 
         holder.recyclerViewHorizontal.setHasFixedSize(true);
         holder.recyclerViewHorizontal.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));

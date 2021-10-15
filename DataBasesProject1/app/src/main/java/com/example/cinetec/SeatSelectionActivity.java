@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.cinetec.adapters.MovieTheaterAdapter;
@@ -24,7 +26,9 @@ public class SeatSelectionActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewVertical;
 
-    //private List<SeatList> seatListList;
+    private List<Seat> selectedSeatList = new ArrayList<>();
+
+    private Button continueButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,17 @@ public class SeatSelectionActivity extends AppCompatActivity {
         recyclerViewVertical = findViewById(R.id.recyclerViewSeatVertical);
         recyclerViewVertical.setHasFixedSize(true);
         recyclerViewVertical.setLayoutManager(new LinearLayoutManager(this));
+
+        continueButton = findViewById(R.id.buttonSeatList);
+        continueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                openConfirmationActivity();
+
+            }
+
+        });
 
         Bundle bundle = getIntent().getExtras();
 
@@ -118,67 +133,54 @@ public class SeatSelectionActivity extends AppCompatActivity {
 
         }
 
-        SeatVerticalAdapter seatVerticalAdapter = new SeatVerticalAdapter(SeatSelectionActivity.this, seatListList);
+        SeatVerticalAdapter seatVerticalAdapter = new SeatVerticalAdapter(SeatSelectionActivity.this, seatListList, this);
         recyclerViewVertical.setAdapter(seatVerticalAdapter);
 
+    }
 
+    public void addSelectedSeat(Seat seat) {
 
+        selectedSeatList.add(seat);
 
+    }
 
+    public void deleteSelectedSeat(Seat seat) {
 
+        selectedSeatList.remove(seat);
 
+    }
 
+    public void openConfirmationActivity() {
 
-
-
-
-
-
-
-
-
-
-
-
-
-        //SeatList seatListList = new SeatList();
-
-        //seatListList.setSeatList(seatList);
-
-        //seatListListGlobal.add(seatListList);
-
-        //seatVerticalAdapter.notifyDataSetChanged();
-
-
-
-
-        //recyclerViewVertical.setAdapter(screeningAdapter);
-
-
-
-        //SeatHorizontalAdapter seatHorizontalAdapter = new SeatHorizontalAdapter(SeatSelectionActivity.this, seatList);
-
-        /*
-        seatHorizontalAdapter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //String selectedMovieTheater = movieTheaterList.get(recyclerView.getChildAdapterPosition(view)).getName();
-
-                //openMovieSelectionActivity(selectedMovieTheater);
-
-                //String selectedScreeningId = Integer.toString(seatList.get(recyclerView.getChildAdapterPosition(view)).getId());
-
-                //Toast.makeText(SeatSelectionActivity.this,"Selection = " + selectedScreeningId, Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        */
-
-
-        //recyclerView.setAdapter(movieTheaterAdapter);
+        Intent intent = new Intent(this, ConfirmationActivity.class);
+        startActivity(intent);
 
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

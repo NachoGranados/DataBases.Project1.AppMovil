@@ -36,8 +36,9 @@
 
             <ImageView
                 android:id="@+id/imageViewScreenVertical"
-                android:layout_width="match_parent"
+                android:layout_width="350dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
                 app:srcCompat="@drawable/screen" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -53,6 +54,7 @@
                 android:layout_marginTop="16dp"
                 android:background="#D07803"
                 android:layout_marginLeft="22dp"
+                android:layout_marginBottom="22dp"
                 android:text="Continue" />
 
         </LinearLayout>
