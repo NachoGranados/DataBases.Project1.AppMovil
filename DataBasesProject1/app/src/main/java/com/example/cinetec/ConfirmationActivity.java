@@ -4,22 +4,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
-
+import android.widget.Button;
+import android.widget.Toast;
 import com.example.cinetec.adapters.ConfirmationSeatAdapter;
 import com.example.cinetec.adapters.MovieAdapter;
 import com.example.cinetec.adapters.MovieTheaterAdapter;
 import com.example.cinetec.adapters.ScreeningAdapter;
-import com.example.cinetec.adapters.SeatHorizontalAdapter;
-import com.example.cinetec.models.Cinema;
 import com.example.cinetec.models.Movie;
 import com.example.cinetec.models.MovieTheater;
 import com.example.cinetec.models.Screening;
 import com.example.cinetec.models.Seat;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +32,8 @@ public class ConfirmationActivity extends AppCompatActivity {
     private RecyclerView recyclerViewMovie;
     private RecyclerView recyclerViewScreening;
     private RecyclerView recyclerViewSeat;
+
+    private Button continueButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +65,21 @@ public class ConfirmationActivity extends AppCompatActivity {
 
         List<Seat> seatList = SeatSelectionActivity.getSelectedSeatList();
 
-        getConfirmationInformation(selectedMovieTheater, selectedMovieOriginalName, selectedScreeningId, selectedMovieImageURL, seatList);
 
+        continueButton = findViewById(R.id.buttonConfirmation);
+        continueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                updateSeatInformation(selectedScreeningId, seatList);
+
+                openMovieTheaterSelectionActivity();
+
+            }
+
+        });
+
+        getConfirmationInformation(selectedMovieTheater, selectedMovieOriginalName, selectedScreeningId, selectedMovieImageURL, seatList);
 
     }
 
@@ -93,10 +111,6 @@ public class ConfirmationActivity extends AppCompatActivity {
         MovieTheaterAdapter movieTheaterAdapter = new MovieTheaterAdapter(ConfirmationActivity.this, movieTheaterList);
 
         recyclerViewMovieTheater.setAdapter(movieTheaterAdapter);
-
-
-
-
 
         cursor = sqLiteDatabase.rawQuery("SELECT * FROM MOVIE WHERE Original_name ='" + selectedMovieOriginalName + "'", null);
 
@@ -156,32 +170,64 @@ public class ConfirmationActivity extends AppCompatActivity {
 
         recyclerViewScreening.setAdapter(screeningAdapter);
 
-
-
-
-
-
         ConfirmationSeatAdapter ConfirmationSeatAdapter = new ConfirmationSeatAdapter(ConfirmationActivity.this, seatList);
 
         recyclerViewSeat.setAdapter(ConfirmationSeatAdapter);
 
+    }
 
+    private void openMovieTheaterSelectionActivity() {
 
+        Intent intent = new Intent(this, MovieTheaterSelectionActivity.class);
+        startActivity(intent);
 
+    }
 
+    private boolean checkInternetConnection() {
 
+        ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
+        return (networkInfo != null && networkInfo.isConnected());
 
+    }
 
+    private void updateSeatInformation(String selectedScreeningId, List<Seat> seatList) {
 
+        AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
+        SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
 
+        for(int i = 0; i < seatList.size(); i++) {
 
+            Seat seat = seatList.get(i);
 
+            sqLiteDatabase.execSQL("DELETE FROM SEAT WHERE Screening_id=" + seat.getScreeningId() + " AND Row_num=" + seat.getRowNum() + " AND Column_num=" + seat.getColumnNum());
 
+            ContentValues contentValues = new ContentValues();
 
+            contentValues.put("Screening_id", seat.getScreeningId());
+            contentValues.put("Row_num", seat.getRowNum());
+            contentValues.put("Column_num", seat.getColumnNum());
+            contentValues.put("State", "sold");
 
+            if(checkInternetConnection()) {
 
+                contentValues.put("Sync_status", 1);
+
+            } else {
+
+                contentValues.put("Sync_status", 0);
+
+            }
+
+            sqLiteDatabase.insert("SEAT", null, contentValues);
+
+        }
+
+        Toast.makeText(ConfirmationActivity.this, "Successful purchase", Toast.LENGTH_SHORT).show();
+
+        sqLiteDatabase.close();
 
     }
 

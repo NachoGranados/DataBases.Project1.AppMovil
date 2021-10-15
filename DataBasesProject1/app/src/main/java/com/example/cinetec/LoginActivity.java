@@ -228,7 +228,6 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (!response.isSuccessful()) {
 
-
                         Toast.makeText(LoginActivity.this, "API Register Failed", Toast.LENGTH_SHORT).show();
 
                     }

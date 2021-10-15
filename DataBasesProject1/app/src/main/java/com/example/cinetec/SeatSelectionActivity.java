@@ -151,8 +151,6 @@ public class SeatSelectionActivity extends AppCompatActivity {
 
         }
 
-        //selectedSeatList.add(seat);
-
     }
 
     public void deleteSelectedSeat(Seat seat) {
@@ -163,19 +161,11 @@ public class SeatSelectionActivity extends AppCompatActivity {
 
         }
 
-        //selectedSeatList.remove(seat);
-
     }
 
     public static List<Seat> getSelectedSeatList() {
 
         return selectedSeatList;
-
-    }
-
-    public static void setSelectedSeatList(List<Seat> selectedSeatList) {
-
-        SeatSelectionActivity.selectedSeatList = selectedSeatList;
 
     }
 
@@ -187,10 +177,6 @@ public class SeatSelectionActivity extends AppCompatActivity {
         intent.putExtra("selectedMovieOriginalName", selectedMovieOriginalName);
         intent.putExtra("selectedScreeningId", selectedScreeningId);
         intent.putExtra("selectedMovieImageURL", selectedMovieImageURL);
-
-        //String selectedSeatListString = selectedSeatList.toString();
-
-        //intent.putExtra("selectedSeatList", selectedSeatListString);
 
         startActivity(intent);
 
