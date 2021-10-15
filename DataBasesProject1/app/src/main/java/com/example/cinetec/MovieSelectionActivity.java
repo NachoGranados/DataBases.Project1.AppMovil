@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.TextView;
 import com.example.cinetec.adapters.MovieAdapter;
 import com.example.cinetec.models.Movie;
-
 import java.util.ArrayList;
 import java.util.List;
 

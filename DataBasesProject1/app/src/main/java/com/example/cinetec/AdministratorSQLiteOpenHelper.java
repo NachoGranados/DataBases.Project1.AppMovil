@@ -3,7 +3,6 @@ package com.example.cinetec;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import androidx.annotation.Nullable;
 
 public class AdministratorSQLiteOpenHelper extends SQLiteOpenHelper {
@@ -37,17 +36,6 @@ public class AdministratorSQLiteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
-        sqLiteDatabase.execSQL("DROP TABLE SEAT");
-        sqLiteDatabase.execSQL("DROP TABLE SCREENING");
-        sqLiteDatabase.execSQL("DROP TABLE ACTORS");
-        sqLiteDatabase.execSQL("DROP TABLE MOVIE");
-        sqLiteDatabase.execSQL("DROP TABLE CINEMA");
-        sqLiteDatabase.execSQL("DROP TABLE MOVIE_THEATER");
-        sqLiteDatabase.execSQL("DROP TABLE CLIENT");
-
-        //onCreate(sqLiteDatabase);
-
-
     }
 
     public void restartDataBase(SQLiteDatabase sqLiteDatabase) {
@@ -58,7 +46,7 @@ public class AdministratorSQLiteOpenHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE MOVIE");
         sqLiteDatabase.execSQL("DROP TABLE SCREENING");
         sqLiteDatabase.execSQL("DROP TABLE ACTOR");
-        //sqLiteDatabase.execSQL("DROP TABLE SEAT");
+        sqLiteDatabase.execSQL("DROP TABLE SEAT");
 
         sqLiteDatabase.execSQL("CREATE TABLE CLIENT(ID INT PRIMARY KEY, First_name VARCHAR(20), Last_name VARCHAR(20), Sec_last_name VARCHAR(20), " +
                                                     "Age INT, Birth_date DATE, Phone_number VARCHAR(20), Password VARCHAR(20), Sync_status INT)");
@@ -74,7 +62,7 @@ public class AdministratorSQLiteOpenHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL("CREATE TABLE ACTOR(Original_movie_name VARCHAR(20), Actor_name VARCHAR(20), PRIMARY KEY (Original_movie_name, Actor_name))");
 
-        //sqLiteDatabase.execSQL("CREATE TABLE SEAT(Screening_id INT, Row_num INT, Column_num INT, State VARCHAR(20), Sync_status INT, PRIMARY KEY (Screening_id, Row_num, Column_num))");
+        sqLiteDatabase.execSQL("CREATE TABLE SEAT(Screening_id INT, Row_num INT, Column_num INT, State VARCHAR(20), Sync_status INT, PRIMARY KEY (Screening_id, Row_num, Column_num))");
 
     }
 

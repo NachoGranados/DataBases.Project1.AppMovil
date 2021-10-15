@@ -1,7 +1,6 @@
 package com.example.cinetec;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.example.cinetec.interfaces.ActorRestAPI;
 import com.example.cinetec.interfaces.CinemaRestAPI;
 import com.example.cinetec.interfaces.ClientRestAPI;
@@ -29,10 +27,8 @@ import com.example.cinetec.models.Movie;
 import com.example.cinetec.models.MovieTheater;
 import com.example.cinetec.models.Screening;
 import com.example.cinetec.models.Seat;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,6 +41,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText idText;
     private EditText passwordText;
+
+    private ArrayList<Integer> screeningIdList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,7 +197,18 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
+        sqLiteDatabase.close();
+
         // Seats posts
+        // UPDATE
+
+
+
+
+
+
+
+
 
     }
 
@@ -261,7 +270,7 @@ public class LoginActivity extends AppCompatActivity {
 
         getActorsInformation();
 
-        //getSeatsInformation();
+        getSeatsInformation();
 
     }
 
@@ -335,6 +344,8 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
+        sqLiteDatabase.close();
+
     }
 
     private void getMovieTheatersInformation() {
@@ -401,6 +412,8 @@ public class LoginActivity extends AppCompatActivity {
             sqLiteDatabase.insert("MOVIE_THEATER", null, contentValues);
 
         }
+
+        sqLiteDatabase.close();
 
     }
 
@@ -470,6 +483,8 @@ public class LoginActivity extends AppCompatActivity {
             sqLiteDatabase.insert("CINEMA", null, contentValues);
 
         }
+
+        sqLiteDatabase.close();
 
     }
 
@@ -541,6 +556,7 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
+        sqLiteDatabase.close();
 
     }
 
@@ -595,9 +611,13 @@ public class LoginActivity extends AppCompatActivity {
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
 
+        screeningIdList.clear();
+
         for(int i = 0; i < screeningList.size(); i++) {
 
             Screening screening = screeningList.get(i);
+
+            screeningIdList.add(screening.getId());
 
             ContentValues contentValues = new ContentValues();
 
@@ -610,6 +630,8 @@ public class LoginActivity extends AppCompatActivity {
             sqLiteDatabase.insert("SCREENING", null, contentValues);
 
         }
+
+        sqLiteDatabase.close();
 
     }
 
@@ -677,9 +699,10 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
+        sqLiteDatabase.close();
+
     }
 
-    /*
     private void getSeatsInformation() {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
@@ -687,42 +710,48 @@ public class LoginActivity extends AppCompatActivity {
 
         SeatRestAPI seatRestAPI = retrofit.create(SeatRestAPI.class);
 
-        Call<List<Seat>> call = seatRestAPI.getScreening();
-        call.enqueue(new Callback<List<Seat>>() {
+        for (int i = 0; i < screeningIdList.size(); i++) {
 
-            @Override
-            public void onResponse(Call<List<Seat>> call, Response<List<Seat>> response) {
+            Call<List<Seat>> call = seatRestAPI.getSeats(screeningIdList.get(i));
+            call.enqueue(new Callback<List<Seat>>() {
 
-                try {
+                @Override
+                public void onResponse(Call<List<Seat>> call, Response<List<Seat>> response) {
 
-                    if (response.isSuccessful()) {
+                    try {
 
-                        List<Seat> seatList = response.body();
+                        if (response.isSuccessful()) {
 
-                        addSeats(seatList);
+                            List<Seat> seatList = response.body();
 
-                    } else {
+                            addSeats(seatList);
 
-                        Toast.makeText(LoginActivity.this, "Unsuccessful Actors GET", Toast.LENGTH_SHORT).show();
+                        } else {
+
+                            Toast.makeText(LoginActivity.this, "Unsuccessful Seats GET", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    } catch (Exception exception) {
+
+                        Toast.makeText(LoginActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
 
                     }
 
-                } catch (Exception exception) {
+                }
 
-                    Toast.makeText(LoginActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+                @Override
+                public void onFailure(Call<List<Seat>> call, Throwable t) {
+
+                    Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
 
-            }
+            });
 
-            @Override
-            public void onFailure(Call<List<Seat>> call, Throwable t) {
+        }
 
-                Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
 
-            }
-
-        });
 
     }
 
@@ -741,12 +770,14 @@ public class LoginActivity extends AppCompatActivity {
             contentValues.put("Row_num", seat.getRowNum());
             contentValues.put("Column_num", seat.getColumnNum());
             contentValues.put("State", seat.getState());
+            contentValues.put("Sync_status", 1);
 
             sqLiteDatabase.insert("SEAT", null, contentValues);
 
         }
 
+        sqLiteDatabase.close();
+
     }
-    */
 
 }

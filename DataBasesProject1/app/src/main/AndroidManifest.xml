@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat">
         <activity
+            android:name=".SeatSelectionActivity"
+            android:exported="false" />
+        <activity
             android:name=".ScreeningSelectionActivity"
             android:exported="true" />
         <activity

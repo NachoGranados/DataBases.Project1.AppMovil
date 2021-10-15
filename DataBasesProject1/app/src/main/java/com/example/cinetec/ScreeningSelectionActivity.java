@@ -3,6 +3,8 @@ package com.example.cinetec;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.cinetec.adapters.ScreeningAdapter;
 import com.example.cinetec.models.Cinema;
+import com.example.cinetec.models.Movie;
 import com.example.cinetec.models.Screening;
 import java.util.ArrayList;
 import java.util.List;
@@ -107,77 +110,63 @@ public class ScreeningSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String selection = Integer.toString(screeningList.get(recyclerView.getChildAdapterPosition(view)).getCinemaNumber());
+                String selectedScreeningId = Integer.toString(screeningList.get(recyclerView.getChildAdapterPosition(view)).getId());
 
-                Toast.makeText(ScreeningSelectionActivity.this,"Selection = " + selection, Toast.LENGTH_SHORT).show();
+                String selectedScreeningCinemaNumber = Integer.toString(screeningList.get(recyclerView.getChildAdapterPosition(view)).getCinemaNumber());
 
-                //openScreeningSelectionActivity(selectedMovieTheater);
+                //Toast.makeText(ScreeningSelectionActivity.this,"Selection = " + selectedScreeningId, Toast.LENGTH_SHORT).show();
+
+                String[] result = getRowNumber(selectedScreeningCinemaNumber);
+
+                String rows = result[0];
+                String columns = result[1];
+
+                openSeatSelectionActivity(selectedScreeningId, rows, columns);
 
             }
+
         });
 
         recyclerView.setAdapter(screeningAdapter);
 
+    }
 
+    private String[] getRowNumber(String selectedScreeningCinemaNumber) {
 
+        String[] result = {"", ""};
 
+        String rows = "";
+        String columns = "";
 
+        AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
+        SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
 
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT Rows, Columns FROM CINEMA WHERE Number =" + selectedScreeningCinemaNumber, null);
 
+        while(cursor.moveToNext()) {
 
+            rows = cursor.getString(0);
+            columns = cursor.getString(1);
 
+        }
 
+        result[0] = rows;
+        result[1] = columns;
 
-
-
-
-
-
-
-
-
-
-
-
-
+        return result;
 
     }
 
+    private void openSeatSelectionActivity(String selectedScreeningId, String rows, String columns) {
 
+        Intent intent = new Intent(this, SeatSelectionActivity.class);
 
+        intent.putExtra("selectedScreeningId", selectedScreeningId);
+        intent.putExtra("rows", rows);
+        intent.putExtra("columns", columns);
 
+        startActivity(intent);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 }
