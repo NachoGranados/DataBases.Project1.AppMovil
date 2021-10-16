@@ -45,8 +45,6 @@ public class SeatVerticalAdapter extends RecyclerView.Adapter<SeatVerticalAdapte
 
         SeatHorizontalAdapter seatHorizontalAdapter = new SeatHorizontalAdapter(context, seatList, seatSelectionActivity);
 
-        //Toast.makeText(context, Integer.toString(seatSelectionActivity.getRowSelected()), Toast.LENGTH_SHORT).show();
-
         holder.recyclerViewHorizontal.setHasFixedSize(true);
         holder.recyclerViewHorizontal.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         holder.recyclerViewHorizontal.setAdapter(seatHorizontalAdapter);

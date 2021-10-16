@@ -5,18 +5,16 @@
     android:layout_width="800px"
     android:layout_height="420px"
     android:layout_marginLeft="16dp"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="16dp"
     android:layout_marginRight="16dp"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="16dp"
     android:background="@drawable/custom_input">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewSeat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="4dp"
-        tools:layout_editor_absoluteX="4dp"
-        tools:layout_editor_absoluteY="4dp">
+        android:layout_margin="4dp">
 
         <ImageView
             android:id="@+id/imageViewSeat"

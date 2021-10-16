@@ -37,7 +37,8 @@ public class SeatSelectionActivity extends AppCompatActivity {
 
         recyclerViewVertical = findViewById(R.id.recyclerViewSeatVertical);
         recyclerViewVertical.setHasFixedSize(true);
-        recyclerViewVertical.setLayoutManager(new LinearLayoutManager(this));
+        //recyclerViewVertical.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewVertical.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         selectedSeatList = new ArrayList<>();
 
