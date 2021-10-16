@@ -197,18 +197,39 @@ public class LoginActivity extends AppCompatActivity {
 
         }
 
-        sqLiteDatabase.close();
-
         // Seats posts
-        // UPDATE
+        cursor = sqLiteDatabase.rawQuery("SELECT * FROM SEAT WHERE Sync_status = 0", null);
 
+        while(cursor.moveToNext()) {
 
+            String screeningId = cursor.getString(0);
+            String rowNum = cursor.getString(1);
+            String columnNum = cursor.getString(2);
 
+            Seat seat = new Seat();
 
+            seat.setScreeningId(Integer.parseInt(screeningId));
+            seat.setRowNum(Integer.parseInt(rowNum));
+            seat.setColumnNum(Integer.parseInt(columnNum));
+            seat.setState("sold");
 
+            updateSeat(seat);
 
+            sqLiteDatabase.execSQL("DELETE FROM SEAT WHERE Screening_id=" + seat.getScreeningId() + " AND Row_num=" + seat.getRowNum() + " AND Column_num=" + seat.getColumnNum());
 
+            ContentValues contentValues = new ContentValues();
 
+            contentValues.put("Screening_id", seat.getScreeningId());
+            contentValues.put("Row_num", seat.getRowNum());
+            contentValues.put("Column_num", seat.getColumnNum());
+            contentValues.put("State", "sold");
+            contentValues.put("Sync_status", 1);
+
+            sqLiteDatabase.insert("SEAT", null, contentValues);
+
+        }
+
+        sqLiteDatabase.close();
 
     }
 
@@ -242,6 +263,44 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Client> call, Throwable t) {
+
+                //Toast.makeText(RegisterActivity.this, "Connection Failed", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+    private void updateSeat(Seat seat) {
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        SeatRestAPI seatRestAPI = retrofit.create(SeatRestAPI.class);
+
+        Call<Seat> call = seatRestAPI.putSeat(seat.getScreeningId(), seat.getRowNum(), seat.getColumnNum(), seat);
+        call.enqueue(new Callback<Seat>() {
+            @Override
+            public void onResponse(Call<Seat> call, retrofit2.Response<Seat> response) {
+
+                try {
+
+                    if (!response.isSuccessful()) {
+
+                        Toast.makeText(LoginActivity.this, "API Update Failed", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                } catch (Exception exception) {
+
+                    //Toast.makeText(RegisterActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Seat> call, Throwable t) {
 
                 //Toast.makeText(RegisterActivity.this, "Connection Failed", Toast.LENGTH_SHORT).show();
 

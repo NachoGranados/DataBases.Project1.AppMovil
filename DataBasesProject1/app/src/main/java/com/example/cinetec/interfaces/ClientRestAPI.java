@@ -16,7 +16,4 @@ public interface ClientRestAPI {
     @GET("client")
     public Call<List<Client>> getClients();
 
-    //@GET("client/{id}")
-    //public Call<Client> getClient(@Path("id") String id);
-
 }

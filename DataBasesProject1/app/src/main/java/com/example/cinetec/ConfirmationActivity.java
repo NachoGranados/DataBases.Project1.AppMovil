@@ -3,7 +3,6 @@ package com.example.cinetec;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -19,12 +18,18 @@ import com.example.cinetec.adapters.ConfirmationSeatAdapter;
 import com.example.cinetec.adapters.MovieAdapter;
 import com.example.cinetec.adapters.MovieTheaterAdapter;
 import com.example.cinetec.adapters.ScreeningAdapter;
+import com.example.cinetec.interfaces.SeatRestAPI;
 import com.example.cinetec.models.Movie;
 import com.example.cinetec.models.MovieTheater;
 import com.example.cinetec.models.Screening;
 import com.example.cinetec.models.Seat;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ConfirmationActivity extends AppCompatActivity {
 
@@ -71,7 +76,7 @@ public class ConfirmationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                updateSeatInformation(selectedScreeningId, seatList);
+                updateSeatInformation(seatList);
 
                 openMovieTheaterSelectionActivity();
 
@@ -193,7 +198,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
     }
 
-    private void updateSeatInformation(String selectedScreeningId, List<Seat> seatList) {
+    private void updateSeatInformation(List<Seat> seatList) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
@@ -215,6 +220,10 @@ public class ConfirmationActivity extends AppCompatActivity {
 
                 contentValues.put("Sync_status", 1);
 
+                seat.setState("sold");
+
+                updateSeat(seat);
+
             } else {
 
                 contentValues.put("Sync_status", 0);
@@ -228,6 +237,44 @@ public class ConfirmationActivity extends AppCompatActivity {
         Toast.makeText(ConfirmationActivity.this, "Successful purchase", Toast.LENGTH_SHORT).show();
 
         sqLiteDatabase.close();
+
+    }
+
+    private void updateSeat(Seat seat) {
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+                .addConverterFactory(GsonConverterFactory.create()).build();
+
+        SeatRestAPI seatRestAPI = retrofit.create(SeatRestAPI.class);
+
+        Call<Seat> call = seatRestAPI.putSeat(seat.getScreeningId(), seat.getRowNum(), seat.getColumnNum(), seat);
+        call.enqueue(new Callback<Seat>() {
+            @Override
+            public void onResponse(Call<Seat> call, retrofit2.Response<Seat> response) {
+
+                try {
+
+                    if (!response.isSuccessful()) {
+
+                        Toast.makeText(ConfirmationActivity.this, "API Update Failed", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                } catch (Exception exception) {
+
+                    //Toast.makeText(RegisterActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Seat> call, Throwable t) {
+
+                //Toast.makeText(RegisterActivity.this, "Connection Failed", Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
     }
 
