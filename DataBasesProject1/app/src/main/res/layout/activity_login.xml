@@ -11,7 +11,7 @@
         android:id="@+id/loginImageView"
         android:layout_width="411dp"
         android:layout_height="436dp"
-        app:srcCompat="@drawable/logo2"
+        app:srcCompat="@drawable/logo"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 

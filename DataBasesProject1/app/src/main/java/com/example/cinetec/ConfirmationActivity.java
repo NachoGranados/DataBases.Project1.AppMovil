@@ -38,7 +38,7 @@ public class ConfirmationActivity extends AppCompatActivity {
     private RecyclerView recyclerViewScreening;
     private RecyclerView recyclerViewSeat;
 
-    private Button continueButton;
+    private Button purchaseButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +70,8 @@ public class ConfirmationActivity extends AppCompatActivity {
 
         List<Seat> seatList = SeatSelectionActivity.getSelectedSeatList();
 
-
-        continueButton = findViewById(R.id.buttonConfirmation);
-        continueButton.setOnClickListener(new View.OnClickListener() {
+        purchaseButton = findViewById(R.id.buttonConfirmationPurchase);
+        purchaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
