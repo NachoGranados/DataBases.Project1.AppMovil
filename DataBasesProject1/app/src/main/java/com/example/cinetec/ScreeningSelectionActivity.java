@@ -35,6 +35,7 @@ public class ScreeningSelectionActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
+        String clientID = bundle.getString("clientID");
         String selectedMovieTheater = bundle.getString("selectedMovieTheater");
         String selectedMovieOriginalName = bundle.getString("selectedMovieOriginalName");
         String selectedMovieImageURL = bundle.getString("selectedMovieImageURL");
@@ -43,11 +44,11 @@ public class ScreeningSelectionActivity extends AppCompatActivity {
 
         movieList.setText(selectedMovieTheater + " Screening List");
 
-        getScreeningsInformation(selectedMovieTheater, selectedMovieOriginalName, selectedMovieImageURL);
+        getScreeningsInformation(clientID, selectedMovieTheater, selectedMovieOriginalName, selectedMovieImageURL);
 
     }
 
-    private void getScreeningsInformation(String selectedMovieTheater, String selectedMovieOriginalName, String selectedMovieImageURL) {
+    private void getScreeningsInformation(String clientID, String selectedMovieTheater, String selectedMovieOriginalName, String selectedMovieImageURL) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
@@ -119,7 +120,7 @@ public class ScreeningSelectionActivity extends AppCompatActivity {
                 String rows = result[0];
                 String columns = result[1];
 
-                openSeatSelectionActivity(selectedMovieTheater, selectedMovieOriginalName, selectedScreeningId, selectedMovieImageURL, rows, columns);
+                openSeatSelectionActivity(clientID, selectedMovieTheater, selectedMovieOriginalName, selectedScreeningId, selectedMovieImageURL, rows, columns);
 
             }
 
@@ -155,10 +156,11 @@ public class ScreeningSelectionActivity extends AppCompatActivity {
 
     }
 
-    private void openSeatSelectionActivity(String selectedMovieTheater, String selectedMovieOriginalName, String selectedScreeningId, String selectedMovieImageURL, String rows, String columns) {
+    private void openSeatSelectionActivity(String clientID, String selectedMovieTheater, String selectedMovieOriginalName, String selectedScreeningId, String selectedMovieImageURL, String rows, String columns) {
 
         Intent intent = new Intent(this, SeatSelectionActivity.class);
 
+        intent.putExtra("clientID", clientID);
         intent.putExtra("selectedMovieTheater", selectedMovieTheater);
         intent.putExtra("selectedMovieOriginalName", selectedMovieOriginalName);
         intent.putExtra("selectedScreeningId", selectedScreeningId);

@@ -63,13 +63,13 @@ public class ConfirmationActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
+        String clientID = bundle.getString("clientID");
         String selectedMovieTheater = bundle.getString("selectedMovieTheater");
         String selectedMovieOriginalName = bundle.getString("selectedMovieOriginalName");
         String selectedScreeningId = bundle.getString("selectedScreeningId");
         String selectedMovieImageURL = bundle.getString("selectedMovieImageURL");
 
         List<Seat> seatList = SeatSelectionActivity.getSelectedSeatList();
-
 
         continueButton = findViewById(R.id.buttonConfirmation);
         continueButton.setOnClickListener(new View.OnClickListener() {

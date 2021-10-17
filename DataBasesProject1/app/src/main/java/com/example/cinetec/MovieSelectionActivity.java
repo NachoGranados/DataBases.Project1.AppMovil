@@ -31,17 +31,18 @@ public class MovieSelectionActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
+        String clientID = bundle.getString("clientID");
         String selectedMovieTheater = bundle.getString("selectedMovieTheater");
 
         movieList = findViewById(R.id.textViewMovieList);
 
         movieList.setText(selectedMovieTheater + " Movie List");
 
-        getMoviesInformation(selectedMovieTheater);
+        getMoviesInformation(clientID, selectedMovieTheater);
 
     }
 
-    private void getMoviesInformation(String selectedMovieTheater) {
+    private void getMoviesInformation(String clientID, String selectedMovieTheater) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
@@ -81,7 +82,7 @@ public class MovieSelectionActivity extends AppCompatActivity {
                 String selectedMovieOriginalName = movieList.get(recyclerView.getChildAdapterPosition(view)).getOriginalName();
                 String selectedMovieImageURL = movieList.get(recyclerView.getChildAdapterPosition(view)).getImageUrl();
 
-                openScreeningSelectionActivity(selectedMovieTheater, selectedMovieOriginalName, selectedMovieImageURL);
+                openScreeningSelectionActivity(clientID, selectedMovieTheater, selectedMovieOriginalName, selectedMovieImageURL);
 
             }
         });
@@ -90,10 +91,11 @@ public class MovieSelectionActivity extends AppCompatActivity {
 
     }
 
-    private void openScreeningSelectionActivity(String selectedMovieTheater, String selectedMovieOriginalName, String selectedMovieImageURL) {
+    private void openScreeningSelectionActivity(String clientID, String selectedMovieTheater, String selectedMovieOriginalName, String selectedMovieImageURL) {
 
         Intent intent = new Intent(this, ScreeningSelectionActivity.class);
 
+        intent.putExtra("clientID", clientID);
         intent.putExtra("selectedMovieTheater", selectedMovieTheater);
         intent.putExtra("selectedMovieOriginalName", selectedMovieOriginalName);
         intent.putExtra("selectedMovieImageURL", selectedMovieImageURL);

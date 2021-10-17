@@ -26,11 +26,15 @@ public class MovieTheaterSelectionActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        getMovieTheatersInformation();
+        Bundle bundle = getIntent().getExtras();
+
+        String clientID = bundle.getString("clientID");
+
+        getMovieTheatersInformation(clientID);
 
     }
 
-    public void getMovieTheatersInformation() {
+    public void getMovieTheatersInformation(String clientID) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
@@ -63,7 +67,7 @@ public class MovieTheaterSelectionActivity extends AppCompatActivity {
 
                 String selectedMovieTheater = movieTheaterList.get(recyclerView.getChildAdapterPosition(view)).getName();
 
-                openMovieSelectionActivity(selectedMovieTheater);
+                openMovieSelectionActivity(clientID, selectedMovieTheater);
 
             }
         });
@@ -72,10 +76,11 @@ public class MovieTheaterSelectionActivity extends AppCompatActivity {
 
     }
 
-    private void openMovieSelectionActivity(String selectedMovieTheater) {
+    private void openMovieSelectionActivity(String clientID, String selectedMovieTheater) {
 
         Intent intent = new Intent(this, MovieSelectionActivity.class);
 
+        intent.putExtra("clientID", clientID);
         intent.putExtra("selectedMovieTheater", selectedMovieTheater);
 
         startActivity(intent);
