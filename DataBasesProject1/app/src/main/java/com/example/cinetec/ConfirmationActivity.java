@@ -1,18 +1,30 @@
 package com.example.cinetec;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Typeface;
+import android.graphics.pdf.PdfDocument;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Toast;
 import com.example.cinetec.adapters.ConfirmationSeatAdapter;
 import com.example.cinetec.adapters.MovieAdapter;
@@ -23,7 +35,16 @@ import com.example.cinetec.models.Movie;
 import com.example.cinetec.models.MovieTheater;
 import com.example.cinetec.models.Screening;
 import com.example.cinetec.models.Seat;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import retrofit2.Call;
@@ -77,6 +98,8 @@ public class ConfirmationActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 updateSeatInformation(seatList);
+
+                generateInvoice(clientID, selectedMovieTheater, selectedMovieOriginalName, selectedScreeningId, seatList.size());
 
                 openMovieTheaterSelectionActivity(clientID);
 
@@ -278,6 +301,145 @@ public class ConfirmationActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private void generateInvoice(String clientID, String selectedMovieTheater, String selectedMovieOriginalName, String selectedScreeningId, int seatListSize) {
+
+        AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
+        SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
+
+        PdfDocument pdfDocument = new PdfDocument();
+
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(1200, 2010, 1).create();
+        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
+
+        Canvas canvas = page.getCanvas();
+
+        Paint titilePaint = new Paint();
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
+        Bitmap bitmapLogo = Bitmap.createScaledBitmap(bitmap, 580, 300, false);
+
+        canvas.drawBitmap(bitmapLogo, -100, 120, titilePaint);
+
+        titilePaint.setTextAlign(Paint.Align.RIGHT);
+        titilePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        titilePaint.setTextSize(70);
+        canvas.drawText("CineTEC", 1150, 150, titilePaint);
+
+        titilePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        titilePaint.setTextSize(35);
+        canvas.drawText("Barrio Escalante, Avenida 7, San José, Costa Rica", 1150, 250, titilePaint);
+        canvas.drawText("(+506) 2555 5555", 1150, 300, titilePaint);
+        canvas.drawText("costumer_service@cinetec.com", 1150, 350, titilePaint);
+        canvas.drawText("www.cinetec.cr", 1150, 450, titilePaint);
+
+        canvas.drawLine(50, 500, 1150, 500, titilePaint);
+
+        Paint paint = new Paint();
+
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM CLIENT WHERE ID=" + clientID, null);
+
+        String firstName = "";
+        String lastName = "";
+        String secLastName = "";
+        String phoneNumber = "";
+
+        while(cursor.moveToNext()) {
+
+            firstName = cursor.getString(1);
+            lastName = cursor.getString(2);
+            secLastName = cursor.getString(3);
+            phoneNumber = cursor.getString(6);
+
+        }
+
+        paint.setTextAlign(Paint.Align.LEFT);
+        paint.setTextSize(35);
+        canvas.drawText("Invoice issued for:", 50, 550, paint);
+
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        paint.setTextSize(50);
+        canvas.drawText(firstName + " " + lastName + " " + secLastName, 50, 600, paint);
+
+        paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        paint.setTextSize(35);
+        canvas.drawText("(+506) " + phoneNumber, 50, 700, paint);
+
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText("Payment Date: " + dateFormat.format(date) + " " + timeFormat.format(date), 1150, 700, paint);
+        canvas.drawText("Invoice Date: " + dateFormat.format(date) + " " + timeFormat.format(date), 1150, 750, paint);
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText("Movie", 50, 850, paint);
+        canvas.drawText("Screening", 300, 850, paint);
+        canvas.drawText("Theater", 500, 850, paint);
+        canvas.drawText("Price", 700, 850, paint);
+        canvas.drawText("Quantity", 850, 850, paint);
+        canvas.drawText("Total", 1050, 850, paint);
+
+        canvas.drawLine(50, 870, 1150, 870, paint);
+
+        cursor = sqLiteDatabase.rawQuery("SELECT * FROM SCREENING WHERE ID=" + selectedScreeningId, null);
+
+        String hour = "";
+
+        while(cursor.moveToNext()) {
+
+            hour = cursor.getString(3);
+
+        }
+
+        String subTotal = Integer.toString(3097 * seatListSize);
+
+        canvas.drawText(selectedMovieOriginalName, 50, 920, paint);
+        canvas.drawText(hour + ":00", 330, 920, paint);
+        canvas.drawText(selectedMovieTheater, 500, 920, paint);
+        canvas.drawText("₡ 3097", 680, 920, paint);
+        canvas.drawText(Integer.toString(seatListSize), 910, 920, paint);
+        canvas.drawText("₡ " + subTotal, 1040, 920, paint);
+
+        canvas.drawLine(690, 1000, 1150, 1000, paint);
+
+        String total = Integer.toString(3500 * seatListSize);
+
+        paint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText("Subtotal:", 830, 1050, paint);
+        canvas.drawText("₡ " + subTotal, 1150, 1050, paint);
+
+        canvas.drawText("IVA:", 830, 1100, paint);
+        canvas.drawText("13 %", 1150, 1100, paint);
+
+        canvas.drawText("Total:", 830, 1150, paint);
+        canvas.drawText("₡ " + total, 1150, 1150, paint);
+
+        pdfDocument.finishPage(page);
+
+        String pathFile = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
+
+        File file = new File(pathFile, "/CineTEC_Invoice.pdf");
+
+        try {
+
+            pdfDocument.writeTo(new FileOutputStream(file));
+
+        } catch (FileNotFoundException e) {
+
+            e.printStackTrace();
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+        }
+
+        pdfDocument.close();
 
     }
 
