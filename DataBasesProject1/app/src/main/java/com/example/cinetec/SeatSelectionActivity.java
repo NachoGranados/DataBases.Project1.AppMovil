@@ -43,6 +43,7 @@ public class SeatSelectionActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
 
+        String clientID = bundle.getString("clientID");
         String selectedMovieTheater = bundle.getString("selectedMovieTheater");
         String selectedMovieOriginalName = bundle.getString("selectedMovieOriginalName");
         String selectedScreeningId = bundle.getString("selectedScreeningId");
@@ -55,7 +56,7 @@ public class SeatSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                openConfirmationActivity(selectedMovieTheater, selectedMovieOriginalName, selectedScreeningId, selectedMovieImageURL);
+                openConfirmationActivity(clientID, selectedMovieTheater, selectedMovieOriginalName, selectedScreeningId, selectedMovieImageURL);
 
             }
 
@@ -169,10 +170,11 @@ public class SeatSelectionActivity extends AppCompatActivity {
 
     }
 
-    public void openConfirmationActivity(String selectedMovieTheater, String selectedMovieOriginalName, String selectedScreeningId, String selectedMovieImageURL) {
+    public void openConfirmationActivity(String clientID, String selectedMovieTheater, String selectedMovieOriginalName, String selectedScreeningId, String selectedMovieImageURL) {
 
         Intent intent = new Intent(this, ConfirmationActivity.class);
 
+        intent.putExtra("clientID", clientID);
         intent.putExtra("selectedMovieTheater", selectedMovieTheater);
         intent.putExtra("selectedMovieOriginalName", selectedMovieOriginalName);
         intent.putExtra("selectedScreeningId", selectedScreeningId);

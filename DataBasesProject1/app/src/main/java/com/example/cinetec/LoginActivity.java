@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
 
-                    openMovieTheaterSelectionActivity();
+                    openMovieTheaterSelectionActivity(id);
 
 
                 } else {
@@ -141,9 +141,12 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void openMovieTheaterSelectionActivity() {
+    private void openMovieTheaterSelectionActivity(String clientID) {
 
         Intent intent = new Intent(this, MovieTheaterSelectionActivity.class);
+
+        intent.putExtra("clientID", clientID);
+
         startActivity(intent);
 
     }
