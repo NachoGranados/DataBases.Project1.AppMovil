@@ -246,7 +246,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void postClient(Client client) {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         ClientRestAPI clientRestAPI = retrofit.create(ClientRestAPI.class);
@@ -284,7 +284,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void updateSeat(Seat seat) {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         SeatRestAPI seatRestAPI = retrofit.create(SeatRestAPI.class);
@@ -345,7 +345,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void getClientsInformation() {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         ClientRestAPI clientRestAPI = retrofit.create(ClientRestAPI.class);
@@ -419,7 +419,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void getMovieTheatersInformation() {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         MovieTheaterRestAPI movieTheaterRestAPI = retrofit.create(MovieTheaterRestAPI.class);
@@ -488,7 +488,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void getCinemasInformation() {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         CinemaRestAPI cinemaRestAPI = retrofit.create(CinemaRestAPI.class);
@@ -559,7 +559,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void getMoviesInformation() {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         MovieRestAPI movieRestAPI = retrofit.create(MovieRestAPI.class);
@@ -631,7 +631,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void getScreeningsInformation() {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         ScreeningRestAPI screeningRestAPI = retrofit.create(ScreeningRestAPI.class);
@@ -706,7 +706,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void getActorsInformation() {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         ActorRestAPI actorRestAPI = retrofit.create(ActorRestAPI.class);
@@ -774,7 +774,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void getSeatsInformation() {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         SeatRestAPI seatRestAPI = retrofit.create(SeatRestAPI.class);

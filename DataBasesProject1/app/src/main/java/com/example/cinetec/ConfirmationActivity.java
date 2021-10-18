@@ -268,7 +268,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
     private void updateSeat(Seat seat) {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         SeatRestAPI seatRestAPI = retrofit.create(SeatRestAPI.class);

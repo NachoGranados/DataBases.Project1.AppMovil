@@ -166,7 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void postClient(Client client) {
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/")
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
                 .addConverterFactory(GsonConverterFactory.create()).build();
 
         ClientRestAPI clientRestAPI = retrofit.create(ClientRestAPI.class);
