@@ -24,25 +24,26 @@ import java.util.List;
 
 public class SeatSelectionActivity extends AppCompatActivity {
 
+    // Variables to control XML items
     private RecyclerView recyclerViewVertical;
+    private Button continueButton;
 
     private static List<Seat> selectedSeatList;
-
-    private Button continueButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seat_selection);
 
+        // Variables assignment to control XML items
         recyclerViewVertical = findViewById(R.id.recyclerViewSeatVertical);
         recyclerViewVertical.setHasFixedSize(true);
         recyclerViewVertical.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         selectedSeatList = new ArrayList<>();
 
+        // Information get from previous activity
         Bundle bundle = getIntent().getExtras();
-
         String clientID = bundle.getString("clientID");
         String selectedMovieTheater = bundle.getString("selectedMovieTheater");
         String selectedMovieOriginalName = bundle.getString("selectedMovieOriginalName");
@@ -66,11 +67,13 @@ public class SeatSelectionActivity extends AppCompatActivity {
 
     }
 
+    // Gets the seat information in the SQLite Data Base
     private void getSeatsInformation(String selectedScreeningId, int rows, int columns) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
 
+        // Getting seat by screening id
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM SEAT WHERE Screening_id =" + selectedScreeningId, null);
 
         List<SeatList> seatListList = new ArrayList<>();
@@ -144,6 +147,7 @@ public class SeatSelectionActivity extends AppCompatActivity {
 
     }
 
+    // Inserts the selected seat by the user into the the seat selected seat
     public void addSelectedSeat(Seat seat) {
 
         if(!selectedSeatList.contains(seat)) {
@@ -154,6 +158,7 @@ public class SeatSelectionActivity extends AppCompatActivity {
 
     }
 
+    // Deletes the selected seat by the user of the the seat selected seat
     public void deleteSelectedSeat(Seat seat) {
 
         if(selectedSeatList.contains(seat)) {
@@ -170,6 +175,7 @@ public class SeatSelectionActivity extends AppCompatActivity {
 
     }
 
+    // Opens the activity where the user can confirm the information selected and sends the previous information selected
     public void openConfirmationActivity(String clientID, String selectedMovieTheater, String selectedMovieOriginalName, String selectedScreeningId, String selectedMovieImageURL) {
 
         Intent intent = new Intent(this, ConfirmationActivity.class);

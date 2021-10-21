@@ -20,8 +20,8 @@ import java.util.List;
 
 public class ScreeningSelectionActivity extends AppCompatActivity {
 
+    // Variables to control XML items
     private RecyclerView recyclerView;
-
     private TextView movieList;
 
     @Override
@@ -29,12 +29,13 @@ public class ScreeningSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screening_selection);
 
+        // Variables assignment to control XML items
         recyclerView = findViewById(R.id.recyclerViewScreening);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Information get from previous activity
         Bundle bundle = getIntent().getExtras();
-
         String clientID = bundle.getString("clientID");
         String selectedMovieTheater = bundle.getString("selectedMovieTheater");
         String selectedMovieOriginalName = bundle.getString("selectedMovieOriginalName");
@@ -48,11 +49,13 @@ public class ScreeningSelectionActivity extends AppCompatActivity {
 
     }
 
+    // Get the screenings information from the SQLite Data Base to load it into the XML items
     private void getScreeningsInformation(String clientID, String selectedMovieTheater, String selectedMovieOriginalName, String selectedMovieImageURL) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
 
+        // Getting cinema by name of the movie theater
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM CINEMA WHERE Name_movie_theater ='" + selectedMovieTheater + "'", null);
 
         List<Cinema> cinemaList = new ArrayList<>();
@@ -81,6 +84,7 @@ public class ScreeningSelectionActivity extends AppCompatActivity {
 
         for(int i = 0; i < cinemaList.size(); i++) {
 
+            // Getting screening by cinema number and movie original name
             cursor = sqLiteDatabase.rawQuery("SELECT * FROM SCREENING WHERE Cinema_number =" + cinemaList.get(i).getNumber() + " AND Movie_original_name ='" + selectedMovieOriginalName + "'",null);
 
             while(cursor.moveToNext()) {
@@ -140,6 +144,7 @@ public class ScreeningSelectionActivity extends AppCompatActivity {
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
 
+        // Getting rows and columns from cinema by number
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT Rows, Columns FROM CINEMA WHERE Number =" + selectedScreeningCinemaNumber, null);
 
         while(cursor.moveToNext()) {
@@ -156,6 +161,7 @@ public class ScreeningSelectionActivity extends AppCompatActivity {
 
     }
 
+    // Opens the activity where the user can select the seat and sends the previous information selected
     private void openSeatSelectionActivity(String clientID, String selectedMovieTheater, String selectedMovieOriginalName, String selectedScreeningId, String selectedMovieImageURL, String rows, String columns) {
 
         Intent intent = new Intent(this, SeatSelectionActivity.class);

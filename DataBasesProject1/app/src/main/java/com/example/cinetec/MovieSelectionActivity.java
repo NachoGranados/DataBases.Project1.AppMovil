@@ -16,8 +16,8 @@ import java.util.List;
 
 public class MovieSelectionActivity extends AppCompatActivity {
 
+    // Variables to control XML items
     private RecyclerView recyclerView;
-
     private TextView movieList;
 
     @Override
@@ -25,12 +25,13 @@ public class MovieSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_selection);
 
+        // Variables assignment to control XML items
         recyclerView = findViewById(R.id.recyclerViewMovie);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Information get from previous activity
         Bundle bundle = getIntent().getExtras();
-
         String clientID = bundle.getString("clientID");
         String selectedMovieTheater = bundle.getString("selectedMovieTheater");
 
@@ -42,11 +43,13 @@ public class MovieSelectionActivity extends AppCompatActivity {
 
     }
 
+    // Get the movies information from the SQLite Data Base to load it into the XML items
     private void getMoviesInformation(String clientID, String selectedMovieTheater) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
 
+        // Getting movie
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM MOVIE", null);
 
         List<Movie> movieList = new ArrayList<>();
@@ -91,6 +94,7 @@ public class MovieSelectionActivity extends AppCompatActivity {
 
     }
 
+    // Opens the activity where the user can select the screening and sends the previous information selected
     private void openScreeningSelectionActivity(String clientID, String selectedMovieTheater, String selectedMovieOriginalName, String selectedMovieImageURL) {
 
         Intent intent = new Intent(this, ScreeningSelectionActivity.class);

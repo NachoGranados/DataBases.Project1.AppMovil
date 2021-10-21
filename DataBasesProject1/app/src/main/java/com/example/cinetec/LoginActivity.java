@@ -41,8 +41,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
+    // Variables to control XML items
     private Button registerButton;
-
     private EditText idText;
     private EditText passwordText;
 
@@ -57,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 Manifest.permission.WRITE_EXTERNAL_STORAGE}, PackageManager.PERMISSION_GRANTED);
 
+        // Variables assignment to control XML items
         idText = findViewById(R.id.editTextLoginID);
         passwordText = findViewById(R.id.editTextLoginPassword);
 
@@ -71,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
 
         });
 
+        // Post the unsync information to the Rest API from SQLite Data Base
         if(checkInternetConnection()) {
 
             postUnsyncInformation();
@@ -81,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Opens the activity where the user can register a new account
     private void openRegisterActivity() {
 
         Intent intent = new Intent(this, RegisterActivity.class);
@@ -88,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Verify if the user information given is correct based on the SQLite Data base
     public void getClientFromSQLite(View view) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
@@ -98,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
 
         if(!id.isEmpty() && !password.isEmpty()) {
 
+            // Getting password from client by id
             Cursor cursor = sqLiteDatabase.rawQuery("SELECT Password FROM CLIENT WHERE ID =" + id, null);
 
             if(cursor.moveToFirst()) {
@@ -149,6 +154,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Opens the activity where the user can select the movie theater
     private void openMovieTheaterSelectionActivity(String clientID) {
 
         Intent intent = new Intent(this, MovieTheaterSelectionActivity.class);
@@ -159,6 +165,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Checks if the emulator or phone is connected to internet
     private boolean checkInternetConnection() {
 
         ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -169,12 +176,14 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Saves the information of clients and sets in the SQLite that has not been posted inf the Rest API
     private void postUnsyncInformation() {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
 
-        // Clients posts
+        // Client posts
+        // Getting client by sync status
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM CLIENT WHERE Sync_status = 0", null);
 
         while(cursor.moveToNext()) {
@@ -209,6 +218,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         // Seats posts
+        // Getting seat by sync status
         cursor = sqLiteDatabase.rawQuery("SELECT * FROM SEAT WHERE Sync_status = 0", null);
 
         while(cursor.moveToNext()) {
@@ -226,6 +236,7 @@ public class LoginActivity extends AppCompatActivity {
 
             updateSeat(seat);
 
+            // Deleting seat by screening id, row number and column number
             sqLiteDatabase.execSQL("DELETE FROM SEAT WHERE Screening_id=" + seat.getScreeningId() + " AND Row_num=" + seat.getRowNum() + " AND Column_num=" + seat.getColumnNum());
 
             ContentValues contentValues = new ContentValues();
@@ -244,6 +255,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Connects to the Rest API and applies a POST method of clients
     private void postClient(Client client) {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
@@ -282,6 +294,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Connects to the Rest API and applies a PUT method of seats
     private void updateSeat(Seat seat) {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
@@ -320,6 +333,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Deletes all the SQLite tables, creates them again and saves the actual information from the Rest API
     private void refreshDataBase() {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
@@ -343,6 +357,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Connects to the Rest API and applies a GET method of clients
     private void getClientsInformation() {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
@@ -388,6 +403,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Inserts the clients information got in the Rest API into the SQLite Data Base
     private void addClients(List<Client> clientList) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
@@ -417,6 +433,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Connects to the Rest API and applies a GET method of movie theaters
     private void getMovieTheatersInformation() {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
@@ -463,6 +480,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Inserts the movie theaters information got in the Rest API into the SQLite Data Base
     private void addMovieTheaters(List<MovieTheater> movieTheaterList) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
@@ -486,6 +504,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Connects to the Rest API and applies a GET method of cinemas
     private void getCinemasInformation() {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
@@ -532,6 +551,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Inserts the cinemas information got in the Rest API into the SQLite Data Base
     private void addCinemas(List<Cinema> cinemaList) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
@@ -557,6 +577,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Connects to the Rest API and applies a GET method of movies
     private void getMoviesInformation() {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
@@ -603,6 +624,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Inserts the movies information got in the Rest API into the SQLite Data Base
     private void addMovies(List<Movie> movieList) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
@@ -629,6 +651,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Connects to the Rest API and applies a GET method of screenings
     private void getScreeningsInformation() {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
@@ -675,6 +698,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Inserts the screenings information got in the Rest API into the SQLite Data Base
     private void addScreenings(List<Screening> screeningList) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
@@ -704,6 +728,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Connects to the Rest API and applies a GET method of actors
     private void getActorsInformation() {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
@@ -750,6 +775,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Inserts the actors information got in the Rest API into the SQLite Data Base
     private void addActors(List<Actor> actorList) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
@@ -772,6 +798,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Connects to the Rest API and applies a GET method of seats
     private void getSeatsInformation() {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
@@ -824,6 +851,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    // Inserts the seats information got in the Rest API into the SQLite Data Base
     private void addSeats(List<Seat> seatList) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);

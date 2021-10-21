@@ -13,6 +13,7 @@ public class AdministratorSQLiteOpenHelper extends SQLiteOpenHelper {
 
     }
 
+    // Tables creation of the SQLite Data Base
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
@@ -38,6 +39,7 @@ public class AdministratorSQLiteOpenHelper extends SQLiteOpenHelper {
 
     }
 
+    // Deletes all the tables and the information on them and creates again the same tables deleted
     public void restartDataBase(SQLiteDatabase sqLiteDatabase) {
 
         sqLiteDatabase.execSQL("DROP TABLE CLIENT");

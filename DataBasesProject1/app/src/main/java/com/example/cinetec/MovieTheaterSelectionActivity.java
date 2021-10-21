@@ -15,6 +15,7 @@ import java.util.List;
 
 public class MovieTheaterSelectionActivity extends AppCompatActivity {
 
+    // Variables to control XML items
     private RecyclerView recyclerView;
 
     @Override
@@ -22,23 +23,26 @@ public class MovieTheaterSelectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_theater_selection);
 
+        // Variables assignment to control XML items
         recyclerView = findViewById(R.id.recyclerViewMovieTheater);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Information get from previous activity
         Bundle bundle = getIntent().getExtras();
-
         String clientID = bundle.getString("clientID");
 
         getMovieTheatersInformation(clientID);
 
     }
 
+    // Get the movie theaters information from the SQLite Data Base to load it into the XML items
     public void getMovieTheatersInformation(String clientID) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
 
+        // Getting movie theater
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM MOVIE_THEATER", null);
 
         List<MovieTheater> movieTheaterList = new ArrayList<>();
@@ -76,6 +80,7 @@ public class MovieTheaterSelectionActivity extends AppCompatActivity {
 
     }
 
+    // Opens the activity where the user can select the movie and sends the previous information selected
     private void openMovieSelectionActivity(String clientID, String selectedMovieTheater) {
 
         Intent intent = new Intent(this, MovieSelectionActivity.class);

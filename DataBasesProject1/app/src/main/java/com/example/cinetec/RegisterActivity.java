@@ -23,6 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    // Variables to control XML items
     private EditText idText;
     private EditText firstNameText;
     private EditText lastNameText;
@@ -37,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        // Variables assignment to control XML items
         idText = findViewById(R.id.editTextRegisterID);
         firstNameText = findViewById(R.id.editTextRegisterFirstName);
         lastNameText = findViewById(R.id.editTextRegisterLastName);
@@ -48,7 +50,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    public void postClient(View view) {
+    // Saves the client information in the SQLite Data Base
+    public void postClientInformation(View view) {
 
         AdministratorSQLiteOpenHelper administrator = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administrator.getWritableDatabase();
@@ -65,6 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
         if(!id.isEmpty() && !firstName.isEmpty() && !lastName.isEmpty() && !secLastName.isEmpty() && !age.isEmpty() && !birthDate.isEmpty() &&
            !phoneNumber.isEmpty() && !password.isEmpty()) {
 
+            // Getting client by id
             Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM CLIENT WHERE ID =" + id, null);
 
             if(cursor.moveToFirst()) {
@@ -147,6 +151,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    // Opens the activity where the user can verify his or her account
     private void openLoginActivity() {
 
         Intent intent = new Intent(this, LoginActivity.class);
@@ -154,6 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    // Checks if the emulator or phone is connected to internet
     private boolean checkInternetConnection() {
 
         ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -164,6 +170,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    // Connects to the Rest API and applies a POST method of clients
     private void postClient(Client client) {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")

@@ -1,15 +1,11 @@
 package com.example.cinetec;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -24,7 +20,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.Toast;
 import com.example.cinetec.adapters.ConfirmationSeatAdapter;
 import com.example.cinetec.adapters.MovieAdapter;
@@ -35,18 +30,15 @@ import com.example.cinetec.models.Movie;
 import com.example.cinetec.models.MovieTheater;
 import com.example.cinetec.models.Screening;
 import com.example.cinetec.models.Seat;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -54,11 +46,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ConfirmationActivity extends AppCompatActivity {
 
+    // Variables to control XML items
     private RecyclerView recyclerViewMovieTheater;
     private RecyclerView recyclerViewMovie;
     private RecyclerView recyclerViewScreening;
     private RecyclerView recyclerViewSeat;
-
     private Button purchaseButton;
 
     @Override
@@ -66,6 +58,7 @@ public class ConfirmationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirmation);
 
+        // Variables assignment to control XML items
         recyclerViewMovieTheater = findViewById(R.id.recyclerViewMovieTheaterConfirmation);
         recyclerViewMovieTheater.setHasFixedSize(true);
         recyclerViewMovieTheater.setLayoutManager(new LinearLayoutManager(this));
@@ -82,8 +75,8 @@ public class ConfirmationActivity extends AppCompatActivity {
         recyclerViewSeat.setHasFixedSize(true);
         recyclerViewSeat.setLayoutManager(new LinearLayoutManager(this));
 
+        // Information get from previous activity
         Bundle bundle = getIntent().getExtras();
-
         String clientID = bundle.getString("clientID");
         String selectedMovieTheater = bundle.getString("selectedMovieTheater");
         String selectedMovieOriginalName = bundle.getString("selectedMovieOriginalName");
@@ -111,11 +104,13 @@ public class ConfirmationActivity extends AppCompatActivity {
 
     }
 
+    // Gets the selected information from the previous activities
     private void getConfirmationInformation(String selectedMovieTheater, String selectedMovieOriginalName, String selectedScreeningId, String selectedMovieImageURL, List<Seat> seatList) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
         SQLiteDatabase sqLiteDatabase = administratorSQLiteOpenHelper.getWritableDatabase();
 
+        // Getting movie theaters by name
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM MOVIE_THEATER WHERE Name ='" + selectedMovieTheater + "'", null);
 
         List<MovieTheater> movieTheaterList = new ArrayList<>();
@@ -140,6 +135,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
         recyclerViewMovieTheater.setAdapter(movieTheaterAdapter);
 
+        // Getting movies by original name
         cursor = sqLiteDatabase.rawQuery("SELECT * FROM MOVIE WHERE Original_name ='" + selectedMovieOriginalName + "'", null);
 
         List<Movie> movieList = new ArrayList<>();
@@ -170,6 +166,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
         recyclerViewMovie.setAdapter(movieAdapter);
 
+        // Getting screenings by id
         cursor = sqLiteDatabase.rawQuery("SELECT * FROM SCREENING WHERE ID =" + selectedScreeningId,null);
 
         List<Screening> screeningList = new ArrayList<>();
@@ -204,6 +201,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
     }
 
+    // Opens the activity where the user can select the movie theater
     private void openMovieTheaterSelectionActivity(String clientID) {
 
         Intent intent = new Intent(this, MovieTheaterSelectionActivity.class);
@@ -214,6 +212,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
     }
 
+    // Checks if the emulator or phone is connected to internet
     private boolean checkInternetConnection() {
 
         ConnectivityManager connectivityManager = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -224,6 +223,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
     }
 
+    // Updates the seat information in the SQLite Data Base
     private void updateSeatInformation(List<Seat> seatList) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
@@ -233,6 +233,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
             Seat seat = seatList.get(i);
 
+            // Getting seats by screening id, row number and column number
             sqLiteDatabase.execSQL("DELETE FROM SEAT WHERE Screening_id=" + seat.getScreeningId() + " AND Row_num=" + seat.getRowNum() + " AND Column_num=" + seat.getColumnNum());
 
             ContentValues contentValues = new ContentValues();
@@ -242,6 +243,7 @@ public class ConfirmationActivity extends AppCompatActivity {
             contentValues.put("Column_num", seat.getColumnNum());
             contentValues.put("State", "sold");
 
+            // emulator or phone connected to internet
             if(checkInternetConnection()) {
 
                 contentValues.put("Sync_status", 1);
@@ -250,6 +252,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
                 updateSeat(seat);
 
+            // emulator or phone not connected to internet
             } else {
 
                 contentValues.put("Sync_status", 0);
@@ -266,6 +269,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
     }
 
+    // Connects to the Rest API and applies a PUT method of seats
     private void updateSeat(Seat seat) {
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl("http://10.0.2.2:5000/api/")
@@ -304,6 +308,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
     }
 
+    // Generates the invoice in PDF format
     private void generateInvoice(String clientID, String selectedMovieTheater, String selectedMovieOriginalName, String selectedScreeningId, int seatListSize) {
 
         AdministratorSQLiteOpenHelper administratorSQLiteOpenHelper = new AdministratorSQLiteOpenHelper(this, "CineTEC", null, 1);
@@ -316,29 +321,30 @@ public class ConfirmationActivity extends AppCompatActivity {
 
         Canvas canvas = page.getCanvas();
 
-        Paint titilePaint = new Paint();
+        Paint titlePaint = new Paint();
 
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
         Bitmap bitmapLogo = Bitmap.createScaledBitmap(bitmap, 580, 300, false);
 
-        canvas.drawBitmap(bitmapLogo, -100, 120, titilePaint);
+        canvas.drawBitmap(bitmapLogo, -100, 120, titlePaint);
 
-        titilePaint.setTextAlign(Paint.Align.RIGHT);
-        titilePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-        titilePaint.setTextSize(70);
-        canvas.drawText("CineTEC", 1150, 150, titilePaint);
+        titlePaint.setTextAlign(Paint.Align.RIGHT);
+        titlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        titlePaint.setTextSize(70);
+        canvas.drawText("CineTEC", 1150, 150, titlePaint);
 
-        titilePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
-        titilePaint.setTextSize(35);
-        canvas.drawText("Barrio Escalante, Avenida 7, San José, Costa Rica", 1150, 250, titilePaint);
-        canvas.drawText("(+506) 2555 5555", 1150, 300, titilePaint);
-        canvas.drawText("costumer_service@cinetec.com", 1150, 350, titilePaint);
-        canvas.drawText("www.cinetec.cr", 1150, 450, titilePaint);
+        titlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
+        titlePaint.setTextSize(35);
+        canvas.drawText("Barrio Escalante, Avenida 7, San José, Costa Rica", 1150, 250, titlePaint);
+        canvas.drawText("(+506) 2555 5555", 1150, 300, titlePaint);
+        canvas.drawText("costumer_service@cinetec.com", 1150, 350, titlePaint);
+        canvas.drawText("www.cinetec.cr", 1150, 450, titlePaint);
 
-        canvas.drawLine(50, 500, 1150, 500, titilePaint);
+        canvas.drawLine(50, 500, 1150, 500, titlePaint);
 
         Paint paint = new Paint();
 
+        // Getting client by id
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM CLIENT WHERE ID=" + clientID, null);
 
         String firstName = "";
@@ -386,6 +392,7 @@ public class ConfirmationActivity extends AppCompatActivity {
 
         canvas.drawLine(50, 870, 1150, 870, paint);
 
+        // Getting seats by screening id
         cursor = sqLiteDatabase.rawQuery("SELECT * FROM SCREENING WHERE ID=" + selectedScreeningId, null);
 
         String hour = "";
